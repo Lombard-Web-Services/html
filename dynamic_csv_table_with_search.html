@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Dynamic CSV Table with Search & Ratings</title>
+ <style>
+  body {
+   font-family: Arial, sans-serif;
+   margin: 20px;
+   background-color: #f4f4f4;
+  }
+  .container {
+   background: white;
+   border-radius: 8px;
+   padding: 20px;
+   box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  #searchInput, #columnSelect {
+   width: 100%;
+   padding: 10px;
+   margin-bottom: 10px;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+  }
+  table {
+   width: 100%;
+   border-collapse: collapse;
+  }
+  th, td {
+   border: 1px solid #ddd;
+   padding: 8px;
+   text-align: left;
+  }
+  th {
+   background-color: #4CAF50;
+   color: white;
+  }
+  tr:nth-child(even) {
+   background-color: #f2f2f2;
+  }
+  .rating {
+   color: gold;
+  }
+  @media screen and (max-width: 600px) {
+   table, tr, td {
+    display: block;
+   }
+   tr {
+    margin-bottom: 10px;
+   }
+   td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+   }
+   td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+   }
+  }
+ </style>
+</head>
+<body>
+ <div class="container">
+  <input type="file" id="csvFile" accept=".csv">
+  <select id="columnSelect"></select>
+  <input type="text" id="searchInput" placeholder="Search...">
+  <table id="csvTable"></table>
+ </div>
+
+ <script>
+  document.getElementById('csvFile').addEventListener('change', handleFile);
+  document.getElementById('columnSelect').addEventListener('change', updateTable);
+  document.getElementById('searchInput').addEventListener('input', filterTable);
+
+  let csvData = [];
+  let headers = [];
+
+  function handleFile(e) {
+   const file = e.target.files[0];
+   const reader = new FileReader();
+   reader.onload = function(e) {
+    const content = e.target.result;
+    csvData = content.split('\n').map(row => row.split(';'));
+    headers = csvData[0];
+    populateColumnSelect();
+    updateTable();
+   };
+   reader.readAsText(file);
+  }
+
+  function populateColumnSelect() {
+   const select = document.getElementById('columnSelect');
+   select.innerHTML = '';
+   for (let i = 1; i <= headers.length; i++) {
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = `Show ${i} column${i > 1 ? 's' : ''}`;
+    select.appendChild(option);
+   }
+   select.value = headers.length; // Default to showing all columns
+  }
+
+  function updateTable() {
+   const table = document.getElementById('csvTable');
+   const columnCount = parseInt(document.getElementById('columnSelect').value);
+   
+   let html = '<tr>';
+   for (let i = 0; i < columnCount; i++) {
+    html += `<th>${headers[i]}</th>`;
+   }
+   html += '</tr>';
+
+   for (let i = 1; i < csvData.length; i++) {
+    html += '<tr>';
+    for (let j = 0; j < columnCount; j++) {
+     const cellValue = csvData[i][j] || '';
+     html += `<td data-label="${headers[j]}">${j === columnCount - 1 && headers[j].toLowerCase().includes('rating') ? getStarRating(cellValue) : cellValue}</td>`;
+    }
+    html += '</tr>';
+   }
+
+   table.innerHTML = html;
+   filterTable();
+  }
+
+  function getStarRating(rating) {
+   const numRating = parseFloat(rating);
+   if (isNaN(numRating)) return rating;
+   const fullStars = '★'.repeat(Math.floor(numRating));
+   const emptyStars = '☆'.repeat(5 - Math.ceil(numRating));
+   const halfStar = numRating % 1 >= 0.5 ? '★' : '';
+   return `<span class="rating">${fullStars}${halfStar}${emptyStars}</span>`;
+  }
+
+  function filterTable() {
+   const filter = document.getElementById('searchInput').value.toLowerCase();
+   const rows = document.getElementById('csvTable').getElementsByTagName('tr');
+
+   for (let i = 1; i < rows.length; i++) {
+    const cells = rows[i].getElementsByTagName('td');
+    let shouldShow = false;
+
+    for (let j = 0; j < cells.length; j++) {
+     if (cells[j].textContent.toLowerCase().includes(filter)) {
+      shouldShow = true;
+      break;
+     }
+    }
+
+    rows[i].style.display = shouldShow ? '' : 'none';
+   }
+  }
+ </script>
+</body>
+</html>
