@@ -465,67 +465,87 @@
       function GenderWords(form) {
       const text = form.Text.value.toLowerCase().trim();
       const words = text ? text.split(/\s+/) : [];
+      const wordCount = words.length;
+      // Join words back into a single string for phrase matching
+      const textString = text ? words.join(' ') : '';
       let aiScore = 0, informalFemale = 0, informalMale = 0, formalFemale = 0, formalMale = 0;
       let dictAI, dictInformal, dictFormal, dictAdjFemale, dictAdjMale;
       
-      // Dictionary selection including adjectives
-      if (currentLang === 'en') {
+      // Dictionary selection based on currentLang
+      switch (currentLang) {
+      case 'en':
       dictAI = DictionnaireAIEN;
       dictInformal = DictionnaireInFormelEN;
       dictFormal = DictionnaireFormelEN;
-      dictAdjFemale = {}; // No specific English adjectives provided
+      dictAdjFemale = {}; // Placeholder until English adjectives are added
       dictAdjMale = {};
-      } else if (currentLang === 'fr') {
+      break;
+      case 'fr':
       dictAI = DictionnaireAIFR;
       dictInformal = DictionnaireInFormelFR;
       dictFormal = DictionnaireFormelFR;
       dictAdjFemale = AdjectifsFemininsFR;
       dictAdjMale = AdjectifsMasculinsFR;
-      } else if (currentLang === 'ma') {
+      break;
+      case 'ma':
       dictAI = DictionnaireAIFR;
       dictInformal = InformalMA_Expanded;
       dictFormal = FormalMA_Expanded;
       dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesMA_Expanded).filter(([_, v]) => v < 0));
       dictAdjMale = Object.fromEntries(Object.entries(AdjectivesMA_Expanded).filter(([_, v]) => v > 0));
-      } else if (currentLang === 'he') {
+      break;
+      case 'he':
       dictAI = DictionnaireAIEN;
       dictInformal = InformalHE_Expanded;
       dictFormal = FormalHE_Expanded;
       dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesHE_Expanded).filter(([_, v]) => v < 0));
       dictAdjMale = Object.fromEntries(Object.entries(AdjectivesHE_Expanded).filter(([_, v]) => v > 0));
-      } else if (currentLang === 'es') {
+      break;
+      case 'es':
       dictAI = DictionnaireAIEN;
       dictInformal = InformalES_Expanded;
       dictFormal = FormalES_Expanded;
       dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesES_Expanded).filter(([_, v]) => v < 0));
       dictAdjMale = Object.fromEntries(Object.entries(AdjectivesES_Expanded).filter(([_, v]) => v > 0));
-      } else if (currentLang === 'de') {
+      break;
+      case 'de':
       dictAI = DictionnaireAIEN;
       dictInformal = InformalDE_Expanded;
       dictFormal = FormalDE_Expanded;
       dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesDE_Expanded).filter(([_, v]) => v < 0));
       dictAdjMale = Object.fromEntries(Object.entries(AdjectivesDE_Expanded).filter(([_, v]) => v > 0));
-      } else if (currentLang === 'tr') {
+      break;
+      case 'tr':
       dictAI = DictionnaireAIEN;
       dictInformal = InformalTR_Expanded;
       dictFormal = FormalTR_Expanded;
       dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesTR_Expanded).filter(([_, v]) => v < 0));
       dictAdjMale = Object.fromEntries(Object.entries(AdjectivesTR_Expanded).filter(([_, v]) => v > 0));
-      } else if (currentLang === 'pt') {
+      break;
+      case 'pt':
       dictAI = DictionnaireAIEN;
       dictInformal = InformalPT_Expanded;
       dictFormal = FormalPT_Expanded;
       dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesPT_Expanded).filter(([_, v]) => v < 0));
       dictAdjMale = Object.fromEntries(Object.entries(AdjectivesPT_Expanded).filter(([_, v]) => v > 0));
-      } else if (currentLang === 'hi') {
+      break;
+      case 'hi':
       dictAI = DictionnaireAIEN;
       dictInformal = InformalHI_Expanded;
       dictFormal = FormalHI_Expanded;
       dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesHI_Expanded).filter(([_, v]) => v < 0));
       dictAdjMale = Object.fromEntries(Object.entries(AdjectivesHI_Expanded).filter(([_, v]) => v > 0));
+      break;
+      default:
+      dictAI = {};
+      dictInformal = {};
+      dictFormal = {};
+      dictAdjFemale = {};
+      dictAdjMale = {};
       }
       
       if (text) {
+      // Process single words
       words.forEach(word => {
       if (dictAI[word]) aiScore += dictAI[word];
       if (dictInformal[word]) {
@@ -536,30 +556,80 @@
         if (dictFormal[word] > 0) formalMale += dictFormal[word];
         else formalFemale += Math.abs(dictFormal[word]);
       }
-      if (dictAdjFemale[word]) informalFemale += Math.abs(dictAdjFemale[word]); // Add to informal female score
-      if (dictAdjMale[word]) informalMale += dictAdjMale[word]; // Add to informal male score
+      if (dictAdjFemale[word]) {
+        const weight = Math.abs(dictAdjFemale[word]);
+        informalFemale += weight * 1.5;
+        formalFemale += weight;
+      }
+      if (dictAdjMale[word]) {
+        const weight = dictAdjMale[word];
+        informalMale += weight * 1.5;
+        formalMale += weight;
+      }
       });
+      
+      // Process multi-word phrases with underscores
+      const processPhrases = (dict, maleTarget, femaleTarget) => {
+      Object.entries(dict).forEach(([key, value]) => {
+        const phrase = key.replace(/_/g, ' ');
+        if (textString.includes(phrase)) {
+          const count = (textString.match(new RegExp(phrase, 'g')) || []).length;
+          if (value > 0) maleTarget.value += value * count;
+          else femaleTarget.value += Math.abs(value) * count;
+        }
+      });
+      };
+      
+      // Use objects to allow modification in closure
+      let aiScoreObj = { value: aiScore };
+      let informalMaleObj = { value: informalMale };
+      let informalFemaleObj = { value: informalFemale };
+      let formalMaleObj = { value: formalMale };
+      let formalFemaleObj = { value: formalFemale };
+      
+      processPhrases(dictAI, aiScoreObj, { value: 0 }); // AI only increases score
+      processPhrases(dictInformal, informalMaleObj, informalFemaleObj);
+      processPhrases(dictFormal, formalMaleObj, formalFemaleObj);
+      processPhrases(dictAdjMale, informalMaleObj, informalFemaleObj, 1.5); // Informal boost
+      processPhrases(dictAdjMale, formalMaleObj, formalFemaleObj, 1); // Formal standard
+      processPhrases(dictAdjFemale, informalMaleObj, informalFemaleObj, 1.5); // Informal boost
+      processPhrases(dictAdjFemale, formalMaleObj, formalFemaleObj, 1); // Formal standard
+      
+      // Update scores
+      aiScore = aiScoreObj.value;
+      informalMale = informalMaleObj.value;
+      informalFemale = informalFemaleObj.value;
+      formalMale = formalMaleObj.value;
+      formalFemale = formalFemaleObj.value;
       }
       
+      // AI Detection
       const maxAIScore = 500;
       const aiPercentage = Math.min(Math.max((aiScore / maxAIScore) * 100, 0), 100).toFixed(1);
       const aiVerdict = aiScore > 100 ? uiTexts[currentLang].likelyAI : uiTexts[currentLang].likelyHuman;
       
+      // Informal Gender Prediction
       const informalDifference = informalMale - informalFemale;
       const informalMax = Math.max(informalMale, informalFemale) || 1;
-      const informalPercentage = ((Math.abs(informalDifference) / informalMax) * 100).toFixed(1);
-      const informalVerdict = informalDifference > 0 ? uiTexts[currentLang].male : informalDifference < 0 ? uiTexts[currentLang].female : uiTexts[currentLang].unknown;
+      const informalConfidence = ((Math.abs(informalDifference) / informalMax) * 100).toFixed(1);
+      const informalVerdict = informalDifference > 3 ? uiTexts[currentLang].male : 
+                          informalDifference < -3 ? uiTexts[currentLang].female : 
+                          uiTexts[currentLang].unknown;
       
+      // Formal Gender Prediction
       const formalDifference = formalMale - formalFemale;
       const formalMax = Math.max(formalMale, formalFemale) || 1;
-      const formalPercentage = ((Math.abs(formalDifference) / formalMax) * 100).toFixed(1);
-      const formalVerdict = formalDifference > 0 ? uiTexts[currentLang].male : formalDifference < 0 ? uiTexts[currentLang].female : uiTexts[currentLang].unknown;
+      const formalConfidence = ((Math.abs(formalDifference) / formalMax) * 100).toFixed(1);
+      const formalVerdict = formalDifference > 3 ? uiTexts[currentLang].male : 
+                        formalDifference < -3 ? uiTexts[currentLang].female : 
+                        uiTexts[currentLang].unknown;
       
+      // Results Output
       const results = `
       <h2 class="section-title">${uiTexts[currentLang].analysisSummary}</h2>
       <div class="result-box">
-      <p><span class="label">${uiTexts[currentLang].totalWords}:</span> <span class="value">${words.length}</span></p>
-      ${words.length < 300 ? `<p><span class="value">${uiTexts[currentLang].tooFewWords}</span></p>` : ''}
+      <p><span class="label">${uiTexts[currentLang].totalWords}:</span> <span class="value">${wordCount}</span></p>
+      ${wordCount < 300 ? `<p><span class="value">${uiTexts[currentLang].tooFewWords}</span></p>` : ''}
       </div>
       <div class="separator"></div>
       <h2 class="section-title">${uiTexts[currentLang].aiDetection}</h2>
@@ -570,18 +640,18 @@
       <div class="separator"></div>
       <h2 class="section-title">${uiTexts[currentLang].genderPredictionInformal}</h2>
       <div class="result-box">
-      <p><span class="label">${uiTexts[currentLang].female} =</span> <span class="value">${informalFemale}</span></p>
-      <p><span class="label">${uiTexts[currentLang].male} =</span> <span class="value">${informalMale}</span></p>
-      <p><span class="label">${uiTexts[currentLang].difference} =</span> <span class="value">${Math.abs(informalDifference)}; ${informalPercentage}%</span></p>
-      <p><span class="label">${uiTexts[currentLang].verdict}:</span> <span class="value">${informalVerdict}</span></p>
+      <p><span class="label">${uiTexts[currentLang].female} =</span> <span class="value">${informalFemale.toFixed(1)}</span></p>
+      <p><span class="label">${uiTexts[currentLang].male} =</span> <span class="value">${informalMale.toFixed(1)}</span></p>
+      <p><span class="label">${uiTexts[currentLang].difference} =</span> <span class="value">${Math.abs(informalDifference).toFixed(1)}; ${informalConfidence}%</span></p>
+      <p><span class="label">${uiTexts[currentLang].verdict}:</span> <span class="value">${informalVerdict} (${informalConfidence}% confidence)</span></p>
       </div>
       <div class="separator"></div>
       <h2 class="section-title">${uiTexts[currentLang].genderPredictionFormal}</h2>
       <div class="result-box">
-      <p><span class="label">${uiTexts[currentLang].female} =</span> <span class="value">${formalFemale}</span></p>
-      <p><span class="label">${uiTexts[currentLang].male} =</span> <span class="value">${formalMale}</span></p>
-      <p><span class="label">${uiTexts[currentLang].difference} =</span> <span class="value">${Math.abs(formalDifference)}; ${formalPercentage}%</span></p>
-      <p><span class="label">${uiTexts[currentLang].verdict}:</span> <span class="value">${formalVerdict}</span></p>
+      <p><span class="label">${uiTexts[currentLang].female} =</span> <span class="value">${formalFemale.toFixed(1)}</span></p>
+      <p><span class="label">${uiTexts[currentLang].male} =</span> <span class="value">${formalMale.toFixed(1)}</span></p>
+      <p><span class="label">${uiTexts[currentLang].difference} =</span> <span class="value">${Math.abs(formalDifference).toFixed(1)}; ${formalConfidence}%</span></p>
+      <p><span class="label">${uiTexts[currentLang].verdict}:</span> <span class="value">${formalVerdict} (${formalConfidence}% confidence)</span></p>
       </div>
       `;
       document.getElementById('results').innerHTML = results;
