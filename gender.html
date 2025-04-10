@@ -168,9 +168,49 @@
       background: #fff;
       border-radius: 10px;
       box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
-      font-size: 14px;
+      font-size: 16px;
       color: #444;
       white-space: pre-wrap;
+      }
+      .section-title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 600;
+      margin: 20px 0;
+      background: linear-gradient(45deg, #6a82fb, #fc5c7d);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      }
+      .result-box {
+      background: linear-gradient(135deg, #f9f9f9, #e9ecef);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      margin: 0 auto;
+      max-width: 600px;
+      }
+      .result-box p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 8px 0;
+      }
+      .result-box .label {
+      font-size: 22px;
+      font-weight: 600;
+      color: #6a82fb;
+      display: inline-block;
+      min-width: 150px; /* Ensures alignment */
+      }
+      .result-box .value {
+      font-size: 18px;
+      color: #444;
+      }
+      .separator {
+      width: 80%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #6a82fb, transparent);
+      margin: 30px auto;
       }
       #results h2 {
       font-size: 20px;
@@ -434,13 +474,8 @@
       // Gender and AI analysis (simplified, replace with full logic)
       function GenderWords(form) {
       const text = form.Text.value.toLowerCase().trim();
-      if (!text) {
-      document.getElementById('results').innerHTML = `<h2>${uiTexts[currentLang].analysisSummary}</h2>${uiTexts[currentLang].tooFewWords}`;
-      return;
-      }
-      
-      const words = text.split(/\s+/);
-      let aiScore = 0, informalScore = 0, formalScore = 0;
+      const words = text ? text.split(/\s+/) : [];
+      let aiScore = 0, informalFemale = 0, informalMale = 0, formalFemale = 0, formalMale = 0;
       let dictAI, dictInformal, dictFormal;
       
       // Dictionary selection (unchanged)
@@ -454,31 +489,61 @@
       else if (currentLang === 'pt') { dictAI = DictionnaireAIEN; dictInformal = InformalPT_Expanded; dictFormal = FormalPT_Expanded; }
       else if (currentLang === 'hi') { dictAI = DictionnaireAIEN; dictInformal = InformalHI_Expanded; dictFormal = FormalHI_Expanded; }
       
+      if (text) {
       words.forEach(word => {
       if (dictAI[word]) aiScore += dictAI[word];
-      if (dictInformal[word]) informalScore += dictInformal[word];
-      if (dictFormal[word]) formalScore += dictFormal[word];
+      if (dictInformal[word]) {
+        if (dictInformal[word] > 0) informalMale += dictInformal[word];
+        else informalFemale += Math.abs(dictInformal[word]);
+      }
+      if (dictFormal[word]) {
+        if (dictFormal[word] > 0) formalMale += dictFormal[word];
+        else formalFemale += Math.abs(dictFormal[word]);
+      }
       });
+      }
       
       const maxAIScore = 500;
       const aiPercentage = Math.min(Math.max((aiScore / maxAIScore) * 100, 0), 100).toFixed(1);
       const aiVerdict = aiScore > 100 ? uiTexts[currentLang].likelyAI : uiTexts[currentLang].likelyHuman;
-      const informalGender = informalScore > 0 ? uiTexts[currentLang].male : informalScore < 0 ? uiTexts[currentLang].female : uiTexts[currentLang].unknown;
-      const formalGender = formalScore > 0 ? uiTexts[currentLang].male : formalScore < 0 ? uiTexts[currentLang].female : uiTexts[currentLang].unknown;
-      const informalStrength = Math.abs(informalScore) > 50 ? '' : ` (${uiTexts[currentLang].weak})`;
-      const formalStrength = Math.abs(formalScore) > 50 ? '' : ` (${uiTexts[currentLang].weak})`;
+      
+      const informalDifference = informalMale - informalFemale;
+      const informalMax = Math.max(informalMale, informalFemale) || 1; // Avoid division by 0
+      const informalPercentage = ((Math.abs(informalDifference) / informalMax) * 100).toFixed(1);
+      const informalVerdict = informalDifference > 0 ? uiTexts[currentLang].male : informalDifference < 0 ? uiTexts[currentLang].female : uiTexts[currentLang].unknown;
+      
+      const formalDifference = formalMale - formalFemale;
+      const formalMax = Math.max(formalMale, formalFemale) || 1; // Avoid division by 0
+      const formalPercentage = ((Math.abs(formalDifference) / formalMax) * 100).toFixed(1);
+      const formalVerdict = formalDifference > 0 ? uiTexts[currentLang].male : formalDifference < 0 ? uiTexts[currentLang].female : uiTexts[currentLang].unknown;
       
       const results = `
-      <h2 class="section-title">${uiTexts[currentLang].aiDetection}</h2>
+      <h2 class="section-title">${uiTexts[currentLang].analysisSummary}</h2>
       <div class="result-box">
-        <p>${uiTexts[currentLang].aiScore}: <span class="big-number">${aiScore}</span> (${aiPercentage}% ${uiTexts[currentLang].likelyAI})</p>
-        <p>${uiTexts[currentLang].verdict}: ${aiVerdict}</p>
+      <p><span class="label">${uiTexts[currentLang].totalWords}:</span> <span class="value">${words.length}</span></p>
+      ${words.length < 300 ? `<p><span class="value">${uiTexts[currentLang].tooFewWords}</span></p>` : ''}
       </div>
       <div class="separator"></div>
-      <h2 class="section-title">${uiTexts[currentLang].genderPrediction}</h2>
+      <h2 class="section-title">${uiTexts[currentLang].aiDetection}</h2>
       <div class="result-box">
-        <p>${uiTexts[currentLang].genderPredictionInformal}:<br>${informalGender}${informalStrength} (${uiTexts[currentLang].difference}: <span class="big-number">${Math.abs(informalScore)}</span>)</p>
-        <p>${uiTexts[currentLang].genderPredictionFormal}:<br>${formalGender}${formalStrength} (${uiTexts[currentLang].difference}: <span class="big-number">${Math.abs(formalScore)}</span>)</p>
+      <p><span class="label">${uiTexts[currentLang].aiScore} =</span> <span class="value">${aiScore} (${aiPercentage}%)</span></p>
+      <p><span class="label">${uiTexts[currentLang].verdict}:</span> <span class="value">${aiVerdict}</span></p>
+      </div>
+      <div class="separator"></div>
+      <h2 class="section-title">${uiTexts[currentLang].genderPredictionInformal}</h2>
+      <div class="result-box">
+      <p><span class="label">${uiTexts[currentLang].female} =</span> <span class="value">${informalFemale}</span></p>
+      <p><span class="label">${uiTexts[currentLang].male} =</span> <span class="value">${informalMale}</span></p>
+      <p><span class="label">${uiTexts[currentLang].difference} =</span> <span class="value">${Math.abs(informalDifference)}; ${informalPercentage}%</span></p>
+      <p><span class="label">${uiTexts[currentLang].verdict}:</span> <span class="value">${informalVerdict}</span></p>
+      </div>
+      <div class="separator"></div>
+      <h2 class="section-title">${uiTexts[currentLang].genderPredictionFormal}</h2>
+      <div class="result-box">
+      <p><span class="label">${uiTexts[currentLang].female} =</span> <span class="value">${formalFemale}</span></p>
+      <p><span class="label">${uiTexts[currentLang].male} =</span> <span class="value">${formalMale}</span></p>
+      <p><span class="label">${uiTexts[currentLang].difference} =</span> <span class="value">${Math.abs(formalDifference)}; ${formalPercentage}%</span></p>
+      <p><span class="label">${uiTexts[currentLang].verdict}:</span> <span class="value">${formalVerdict}</span></p>
       </div>
       `;
       document.getElementById('results').innerHTML = results;
