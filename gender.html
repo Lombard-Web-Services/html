@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gender Guesser</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      position: relative;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .lang-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 20px;
+      background: linear-gradient(45deg, #6a82fb, #fc5c7d);
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: transform 0.2s ease;
+    }
+
+    .lang-switch:hover {
+      transform: translateY(-2px);
+    }
+
+    .flag {
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+    }
+
+    p {
+      font-size: 16px;
+      color: #666;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .textarea-container {
+      position: relative;
+    }
+
+    textarea {
+      width: 100%;
+      height: 180px;
+      padding: 15px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      resize: vertical;
+      font-size: 16px;
+      color: #333;
+      background: #fafafa;
+      transition: border-color 0.3s ease;
+    }
+
+    textarea:focus {
+      border-color: #6a82fb;
+      outline: none;
+    }
+
+    #word-count {
+      font-size: 14px;
+      color: #888;
+      text-align: right;
+      margin-top: 5px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    input[type="button"] {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="button"]:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    input[value="Analyze"], input[value="Analyser"] {
+      background: linear-gradient(45deg, #6a82fb, #fc5c7d);
+    }
+
+    input[value="Clear"], input[value="Effacer"] {
+      background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+    }
+
+    input[value="About"], input[value="À propos"] {
+      background: linear-gradient(45deg, #4facfe, #00f2fe);
+    }
+
+    #results {
+      margin-top: 30px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+      font-size: 14px;
+      color: #444;
+      white-space: pre-wrap;
+    }
+
+    #results h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #6a82fb;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      .lang-switch {
+        top: 15px;
+        right: 15px;
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+      .flag {
+        width: 16px;
+        height: 16px;
+      }
+      h1 {
+        font-size: 26px;
+      }
+      p {
+        font-size: 14px;
+      }
+      textarea {
+        height: 140px;
+        font-size: 14px;
+      }
+      #word-count {
+        font-size: 12px;
+      }
+      .button-group {
+        gap: 10px;
+        margin-top: 15px;
+      }
+      input[type="button"] {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+      #results {
+        margin-top: 20px;
+        padding: 15px;
+        font-size: 13px;
+      }
+      #results h2 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="lang-switch" onclick="toggleLanguage()">
+      <span id="flag" class="flag">
+        <svg width="20" height="20" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
+          <rect width="60" height="30" fill="#012169"/>
+          <path d="M0 0L60 30M60 0L0 30" stroke="#FFF" stroke-width="6"/>
+          <path d="M0 0L60 30M60 0L0 30" stroke="#C8102E" stroke-width="4"/>
+          <path d="M30 0V30M0 15H60" stroke="#FFF" stroke-width="10"/>
+          <path d="M30 0V30M0 15H60" stroke="#C8102E" stroke-width="6"/>
+        </svg>
+      </span> English
+    </button>
+    <h1 id="title">Text Analyzer</h1>
+    <p id="instructions">Type or paste a writing sample for gender and AI analysis.<br>For best results, use at least 300 words.</p>
+    <form name="Counter">
+      <div class="textarea-container">
+        <textarea name="Text" placeholder="Enter your text here..." oninput="updateWordCount(this)"></textarea>
+        <div id="word-count">0 words</div>
+      </div>
+      <div class="button-group">
+        <input type="button" value="Analyze" id="analyze-btn" onclick="GenderWords(this.form)">
+        <input type="button" value="Clear" id="clear-btn" onclick="ClearForm(this.form)">
+        <input type="button" value="About" id="about-btn" onclick="alert('A simple tool to detect AI-generated text and predict gender. By thibaut LOMBARD (Lombar dWeb [@lombardweb])')">
+      </div>
+      <div id="results"></div>
+    </form>
+  </div>
+
+  <script>
+    let currentLang = 'en';
+
+    // Updated English AI Dictionary
+    const DictionnaireAIEN = {
+      'data': 20, 'system': 22, 'model': 21, 'algorithm': 23, 'learning': 20, 'generate': 25,
+      'process': 18, 'analysis': 17, 'synthesis': 18, 'network': 19, 'neural': 20, 'optimization': 16,
+      'parameters': 15, 'function': 12, 'intelligence': 19, 'artificial': 20, 'prediction': 18,
+      'classification': 17, 'recognition': 16, 'automatic': 18, 'computational': 15, 'iterative': 14,
+      'convergence': 13, 'metric': 12, 'evaluation': 14, 'performance': 15, 'implementation': 13,
+      'architecture': 16, 'transformer': 17, 'bias': 11, 'robustness': 12, 'interpretability': 10,
+      'training': 18, 'validation': 15, 'test': 14, 'inference': 13, 'corpus': 16, 'semantic': 14,
+      'syntactic': 13, 'contextual': 15, 'vector': 12, 'embedding': 14, 'latent': 11,
+      'probability': 13, 'distribution': 12, 'normalization': 11, 'regularization': 10, 'gradient': 13,
+      'backpropagation': 12, 'hyperparameters': 11, 'deep learning': 24, 'natural language processing': 26,
+      'computer vision': 23, 'machine learning': 25, 'large language model': 27, 'prompt engineering': 22,
+      'zero-shot': 21, 'few-shot': 20, 'fine-tuning': 19, 'reinforcement learning': 23,
+      'generative adversarial network': 24, 'perplexity': 15, 'tokenization': 14, 'embeddings': 16,
+      'pretrained': 17
+    };
+
+    // Other English Dictionaries
+    const DictionnaireInFormelEN = {
+      'actually': -49, 'am': -42, 'as': 37, 'because': -55, 'but': -43, 'ever': 21, 'everything': -44,
+      'good': 31, 'has': -33, 'him': -73, 'if': 25, 'in': 10, 'is': 19, 'like': -43, 'more': -41,
+      'now': 33, 'out': -39, 'since': -25, 'so': -64, 'some': 58, 'something': 26, 'the': 17,
+      'this': 44, 'too': -38, 'well': 15
+    };
+
+    const DictionnaireFormelEN = {
+      'a': 6, 'above': 4, 'and': -4, 'are': 28, 'around': 42, 'as': 23, 'at': 6, 'be': -17, 'below': 8,
+      'her': -9, 'hers': -3, 'if': -47, 'is': 8, 'it': 6, 'many': 6, 'me': -4, 'more': 34, 'myself': -4,
+      'not': -27, 'said': 5, 'she': -6, 'should': -7, 'the': 7, 'these': 8, 'to': 2, 'was': -1, 'we': -8,
+      'what': 35, 'when': -17, 'where': -18, 'who': 19, 'with': -52, 'your': -17
+    };
+
+    // French Dictionaries
+    const DictionnaireInFormelFR = {
+      'en_fait': -5, 'suis': -2, 'comme': 3, 'parce_que': -4, 'mais': -3, 'jamais': 2, 'tout': -2,
+      'bon': 5, 'a': -1, 'lui': 50, 'si': 4, 'dans': 2, 'est': 1, 'genre': -7, 'plus': 3,
+      'maintenant': 2, 'dehors': 3, 'depuis': -2, 'tellement': -5, 'quelques': 4, 'quelque_chose': 1,
+      'le': 3, 'ceci': 2, 'trop': 0, 'bien': 4, 'hein': 4, 'tu': -2, 'ouais': 3,
+      'putain': -12, 'mec': 25, 'nana': -20, 'sérieux': 3, 'grave': 2, 'chouette': -4, 'super': -3,
+      'cool': 1, 'nan': -2, 'tu vois': -4, 'en mode': -6, 'franchement': -2, 'quoi': 0
+    };
+
+    const DictionnaireFormelFR = {
+      'un': 4, 'une': -4, 'au_dessus': 4, 'et': -3, 'sont': 6, 'autour': 5, 'comme': 3, 'à': 2,
+      'être': -4, 'sous': 3, 'il': 65, 'elle': -65, 'son': 12, 'sa': -12, 'ses': 0, 'si': -6,
+      'est': 2, 'plusieurs': 3, 'moi': -2, 'davantage': 4, 'moi_même': -1, 'ne': -2, 'pas': -3,
+      'dit': 2, 'devrait': -2, 'le': 5, 'la': -5, 'les': 0, 'pour': 1, 'était': 2, 'nous': -4,
+      'quoi': 5, 'quand': -3, 'où': -2, 'qui': 4, 'avec': -6, 'votre': -1, 'leur': 0,
+      'celui': 10, 'celle': -10, 'ceux': 5, 'celles': -5, 'monsieur': 30, 'madame': -30,
+      'mademoiselle': -25, 'il a': 15, 'elle a': -15, 'été': 2, 'faite': -3, 'fait': 3,
+      'disait': 1, 'ajoutait': 1, 'soulignait': 1, 'notait': 1, 'observait': -1, 'expliquait': -1,
+      'pensait': -1, 'trouvait': -1
+    };
+
+    const AdjectifsFemininsFR = {
+      'belle': -15, 'jolie': -12, 'élégante': -10, 'douce': -8, 'charmante': -9, 'passionnée': -7,
+      'sensible': -6, 'attentive': -7, 'émotive': -6, 'compréhensive': -5, 'sincère': -4,
+      'ouverte': -5, 'curieuse': -4, 'créative': -5, 'intuitive': -4, 'délicate': -6,
+      'ravissante': -11, 'lumineuse': -7, 'fraîche': -6, 'vive': -5, 'forte': -3,
+      'intelligente': -4, 'ambitieuse': -3
+    };
+
+    const AdjectifsMasculinsFR = {
+      'beau': 15, 'joli': 12, 'élégant': 10, 'doux': 8, 'charmant': 9, 'passionné': 7,
+      'sensible': 6, 'attentif': 7, 'émotif': 6, 'compréhensif': 5, 'sincère': 4,
+      'ouvert': 5, 'curieux': 4, 'créatif': 5, 'intuitif': 4, 'délicat': 6,
+      'ravissant': 11, 'lumineux': 7, 'frais': 6, 'vif': 5, 'fort': 3,
+      'intelligent': 4, 'ambitieux': 3
+    };
+
+    const DictionnaireAIFR = {
+      'données': 25, 'système': 25, 'modèle': 23, 'algorithme': 24, 'apprentissage': 22, 'générer': 28,
+      'traitement': 20, 'analyse': 18, 'synthèse': 19, 'réseau': 21, 'neuronal': 22, 'optimisation': 17,
+      'paramètres': 16, 'fonction': 12, 'intelligence': 20, 'artificielle': 21, 'prédiction': 19,
+      'classification': 18, 'reconnaissance': 17, 'automatique': 19, 'computationnel': 16, 'itératif': 15,
+      'convergence': 14, 'métrique': 13, 'évaluation': 15, 'performance': 16, 'implémentation': 14,
+      'architecture': 17, 'transformer': 18, 'biais': 12, 'robustesse': 13, 'interprétabilité': 11,
+      'entraînement': 19, 'validation': 16, 'test': 15, 'inférence': 14, 'corpus': 17, 'sémantique': 15,
+      'syntaxique': 14, 'contextuel': 16, 'vectoriel': 13, 'embedding': 15, 'latent': 12,
+      'probabilité': 14, 'distribution': 13, 'normalisation': 12, 'régularisation': 11, 'gradient': 14,
+      'rétropropagation': 13, 'hyperparamètres': 12, 'apprentissage profond': 25,
+      'traitement du langage naturel': 27, 'vision par ordinateur': 24
+    };
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'en' ? 'fr' : 'en';
+      const flag = document.getElementById('flag');
+      const switchBtn = document.querySelector('.lang-switch');
+      const title = document.getElementById('title');
+      const instructions = document.getElementById('instructions');
+      const analyzeBtn = document.getElementById('analyze-btn');
+      const clearBtn = document.getElementById('clear-btn');
+      const aboutBtn = document.getElementById('about-btn');
+
+      if (currentLang === 'en') {
+        flag.innerHTML = `<svg width="20" height="20" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
+          <rect width="60" height="30" fill="#012169"/>
+          <path d="M0 0L60 30M60 0L0 30" stroke="#FFF" stroke-width="6"/>
+          <path d="M0 0L60 30M60 0L0 30" stroke="#C8102E" stroke-width="4"/>
+          <path d="M30 0V30M0 15H60" stroke="#FFF" stroke-width="10"/>
+          <path d="M30 0V30M0 15H60" stroke="#C8102E" stroke-width="6"/>
+        </svg>`;
+        switchBtn.innerHTML = '<span id="flag" class="flag">' + flag.innerHTML + '</span> English';
+        title.textContent = "Text Analyzer";
+        instructions.innerHTML = "Type or paste a writing sample for gender and AI analysis.<br>For best results, use at least 300 words.";
+        analyzeBtn.value = "Analyze";
+        clearBtn.value = "Clear";
+        aboutBtn.value = "About";
+        aboutBtn.onclick = () => alert('A simple tool to detect AI-generated text and predict gender. Built with love!');
+      } else {
+        flag.innerHTML = `<svg width="20" height="20" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg">
+          <rect width="10" height="20" fill="#0055A4"/>
+          <rect x="10" width="10" height="20" fill="#FFFFFF"/>
+          <rect x="20" width="10" height="20" fill="#EF4135"/>
+        </svg>`;
+        switchBtn.innerHTML = '<span id="flag" class="flag">' + flag.innerHTML + '</span> Français';
+        title.textContent = "Analyseur de Texte";
+        instructions.innerHTML = "Tapez ou collez un échantillon de texte pour une analyse de genre et d'IA.<br>Pour de meilleurs résultats, utilisez au moins 300 mots.";
+        analyzeBtn.value = "Analyser";
+        clearBtn.value = "Effacer";
+        aboutBtn.value = "À propos";
+        aboutBtn.onclick = () => alert('Un outil simple pour détecter les textes générés par IA et prédire le genre. Construit avec amour !');
+      }
+      GenderWords(document.forms['Counter']);
+    }
+
+    function updateWordCount(textarea) {
+      const text = textarea.value;
+      const words = text.split(/[^a-zA-Z]+/).filter(w => w.length > 0);
+      document.getElementById('word-count').textContent = `${words.length} ${currentLang === 'en' ? 'words' : 'mots'}`;
+    }
+
+    function GenderWords(Form) {
+      var Word;
+      var MaleInFormel = 0;
+      var MaleFormel = 0;
+      var FemaleInFormel = 0;
+      var FemaleFormel = 0;
+      var AIScore = 0;
+      var i;
+
+      var TextIn = Form.Text;
+      var resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = "";
+
+      const DictionnaireInFormel = currentLang === 'en' ? DictionnaireInFormelEN : DictionnaireInFormelFR;
+      const DictionnaireFormel = currentLang === 'en' ? DictionnaireFormelEN : DictionnaireFormelFR;
+      const DictionnaireAI = currentLang === 'en' ? DictionnaireAIEN : DictionnaireAIFR;
+      const AdjectifsFeminins = currentLang === 'fr' ? AdjectifsFemininsFR : {};
+      const AdjectifsMasculins = currentLang === 'fr' ? AdjectifsMasculinsFR : {};
+
+      Word = TextIn.value.toLowerCase();
+      var TextArray = Word.split(/[^a-zA-Z]+/);
+      if (TextArray[TextArray.length - 1] == "") { TextArray.length--; }
+      var wordCount = TextArray.length;
+      resultsDiv.innerHTML += `<h2>${currentLang === 'en' ? 'Analysis Summary' : 'Résumé de l\'analyse'}</h2>`;
+      resultsDiv.innerHTML += `${currentLang === 'en' ? 'Total words' : 'Nombre total de mots'}: ${wordCount}\n`;
+      if (wordCount < 300) {
+        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Too few words. Try 300 words or more.' : 'Trop peu de mots. Essayez 300 mots ou plus.'}\n`;
+      }
+
+      var wordFreq = {};
+      for (i = 0; i < TextArray.length; i++) {
+        Word = TextArray[i];
+        wordFreq[Word] = (wordFreq[Word] || 0) + 1;
+
+        if (!isNaN(DictionnaireInFormel[Word])) {
+          if (DictionnaireInFormel[Word] > 0) MaleInFormel += DictionnaireInFormel[Word];
+          if (DictionnaireInFormel[Word] < 0) FemaleInFormel -= DictionnaireInFormel[Word];
+        }
+        if (!isNaN(DictionnaireFormel[Word])) {
+          if (DictionnaireFormel[Word] > 0) MaleFormel += DictionnaireFormel[Word];
+          if (DictionnaireFormel[Word] < 0) FemaleFormel -= DictionnaireFormel[Word];
+        }
+        if (!isNaN(DictionnaireAI[Word])) {
+          AIScore += DictionnaireAI[Word];
+        }
+        if (currentLang === 'fr') {
+          if (!isNaN(AdjectifsFeminins[Word])) {
+            FemaleInFormel -= AdjectifsFeminins[Word];
+            FemaleFormel -= AdjectifsFeminins[Word];
+          }
+          if (!isNaN(AdjectifsMasculins[Word])) {
+            MaleInFormel += AdjectifsMasculins[Word];
+            MaleFormel += AdjectifsMasculins[Word];
+          }
+        }
+      }
+
+      var personalPronouns = (TextIn.value.match(/\b(i|me|my|mine|we|us|our|ours)\b/gi) || []).length / wordCount;
+      var repetitionScore = Object.values(wordFreq).reduce((sum, freq) => sum + (freq > 5 ? freq : 0), 0) / wordCount;
+      var sentences = TextIn.value.split(/[.!?]+/).filter(s => s.trim()).length;
+      var avgSentenceLen = wordCount / sentences || 0;
+      AIScore += (personalPronouns < 0.01 ? 50 : 0);
+      AIScore += (repetitionScore > 0.05 ? 30 : 0);
+      AIScore += (avgSentenceLen > 20 ? 20 : 0);
+
+      var totalScore = MaleInFormel + FemaleInFormel + MaleFormel + FemaleFormel + AIScore || 1;
+      var aiPercent = (AIScore / totalScore * 100).toFixed(1);
+
+      resultsDiv.innerHTML += `\n<h2>${currentLang === 'en' ? 'AI Detection' : 'Détection IA'}</h2>`;
+      resultsDiv.innerHTML += `${currentLang === 'en' ? 'AI Score' : 'Score IA'} = ${AIScore} (${aiPercent}%)\n`;
+      resultsDiv.innerHTML += `${currentLang === 'en' ? 'Verdict' : 'Verdict'}: ${aiPercent > 50 ? (currentLang === 'en' ? 'Likely AI-generated' : 'Probablement généré par IA') : (currentLang === 'en' ? 'Likely human-written' : 'Probablement écrit par un humain')}\n`;
+
+      if (aiPercent <= 50) {
+        var Percent, Weak = 0;
+
+        resultsDiv.innerHTML += `\n<h2>${currentLang === 'en' ? 'Gender Prediction: Informal' : 'Prédiction de genre : Informel'}</h2>`;
+        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Female' : 'Féminin'} = ${FemaleInFormel}\n`;
+        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Male' : 'Masculin'} = ${MaleInFormel}\n`;
+        if (MaleInFormel + FemaleInFormel > 0) {
+          Percent = MaleInFormel * 100.0 / (MaleInFormel + FemaleInFormel);
+        } else { Percent = 0; }
+        Percent = parseInt(Percent * 100) / 100.0;
+        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Difference' : 'Différence'} = ${(MaleInFormel - FemaleInFormel)}; ${Percent}%\n`;
+        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Verdict' : 'Verdict'}: `;
+        if (Percent > 40 && Percent < 60) { Weak++; resultsDiv.innerHTML += currentLang === 'en' ? 'Weak ' : 'Faible '; }
+        if (MaleInFormel > FemaleInFormel) { resultsDiv.innerHTML += currentLang === 'en' ? 'MALE' : 'MASCULIN'; }
+        else if (MaleInFormel < FemaleInFormel) { resultsDiv.innerHTML += currentLang === 'en' ? 'FEMALE' : 'FÉMININ'; }
+        else { resultsDiv.innerHTML += currentLang === 'en' ? 'unknown' : 'inconnu'; }
+        if (Weak > 0) { resultsDiv.innerHTML += `\n${currentLang === 'en' ? 'Weak emphasis could indicate European.' : 'Un faible accent pourrait indiquer un Européen.'}`; }
+
+        Weak = 0;
+        resultsDiv.innerHTML += `\n\n<h2>${currentLang === 'en' ? 'Gender Prediction: Formal' : 'Prédiction de genre : Formel'}</h2>`;
+        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Female' : 'Féminin'} = ${FemaleFormel}\n`;
+        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Male' : 'Masculin'} = ${MaleFormel}\n`;
+        if (MaleFormel + FemaleFormel > 0) {
+          Percent = MaleFormel * 100.0 / (MaleFormel + FemaleFormel);
+        } else { Percent = 0.001; }
+        Percent = parseInt(Percent * 100) / 100.0;
+        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Difference' : 'Différence'} = ${(MaleFormel - FemaleFormel)}; ${Percent}%\n`;
+        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Verdict' : 'Verdict'}: `;
+        if (Percent > 40 && Percent < 60) { Weak++; resultsDiv.innerHTML += currentLang === 'en' ? 'Weak ' : 'Faible '; }
+        if (MaleFormel > FemaleFormel) { resultsDiv.innerHTML += currentLang === 'en' ? 'MALE' : 'MASCULIN'; }
+        else if (MaleFormel < FemaleFormel) { resultsDiv.innerHTML += currentLang === 'en' ? 'FEMALE' : 'FÉMININ'; }
+        else { resultsDiv.innerHTML += currentLang === 'en' ? 'unknown' : 'inconnu'; }
+        if (Weak > 0) { resultsDiv.innerHTML += `\n${currentLang === 'en' ? 'Weak emphasis could indicate European.' : 'Un faible accent pourrait indiquer un Européen.'}`; }
+      } else {
+        resultsDiv.innerHTML += `\n<h2>${currentLang === 'en' ? 'Gender Prediction' : 'Prédiction de genre'}</h2>`;
+        resultsDiv.innerHTML += `${currentLang === 'en' ? 'AI detected, skipping gender prediction.' : 'IA détectée, prédiction de genre ignorée.'}\n`;
+      }
+    }
+
+    function ClearForm(form) {
+      form.Text.value = "";
+      document.getElementById('word-count').textContent = `0 ${currentLang === 'en' ? 'words' : 'mots'}`;
+      document.getElementById('results').innerHTML = "";
+    }
+  </script>
+</body>
+</html>
