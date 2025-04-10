@@ -6,7 +6,7 @@
     <title>Gender Guesser</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
-    * {
+      * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -466,18 +466,64 @@
       const text = form.Text.value.toLowerCase().trim();
       const words = text ? text.split(/\s+/) : [];
       let aiScore = 0, informalFemale = 0, informalMale = 0, formalFemale = 0, formalMale = 0;
-      let dictAI, dictInformal, dictFormal;
+      let dictAI, dictInformal, dictFormal, dictAdjFemale, dictAdjMale;
       
-      // Dictionary selection (unchanged)
-      if (currentLang === 'en') { dictAI = DictionnaireAIEN; dictInformal = DictionnaireInFormelEN; dictFormal = DictionnaireFormelEN; }
-      else if (currentLang === 'fr') { dictAI = DictionnaireAIFR; dictInformal = DictionnaireInFormelFR; dictFormal = DictionnaireFormelFR; }
-      else if (currentLang === 'ma') { dictAI = DictionnaireAIFR; dictInformal = InformalMA_Expanded; dictFormal = FormalMA_Expanded; }
-      else if (currentLang === 'he') { dictAI = DictionnaireAIEN; dictInformal = InformalHE_Expanded; dictFormal = FormalHE_Expanded; }
-      else if (currentLang === 'es') { dictAI = DictionnaireAIEN; dictInformal = InformalES_Expanded; dictFormal = FormalES_Expanded; }
-      else if (currentLang === 'de') { dictAI = DictionnaireAIEN; dictInformal = InformalDE_Expanded; dictFormal = FormalDE_Expanded; }
-      else if (currentLang === 'tr') { dictAI = DictionnaireAIEN; dictInformal = InformalTR_Expanded; dictFormal = FormalTR_Expanded; }
-      else if (currentLang === 'pt') { dictAI = DictionnaireAIEN; dictInformal = InformalPT_Expanded; dictFormal = FormalPT_Expanded; }
-      else if (currentLang === 'hi') { dictAI = DictionnaireAIEN; dictInformal = InformalHI_Expanded; dictFormal = FormalHI_Expanded; }
+      // Dictionary selection including adjectives
+      if (currentLang === 'en') {
+      dictAI = DictionnaireAIEN;
+      dictInformal = DictionnaireInFormelEN;
+      dictFormal = DictionnaireFormelEN;
+      dictAdjFemale = {}; // No specific English adjectives provided
+      dictAdjMale = {};
+      } else if (currentLang === 'fr') {
+      dictAI = DictionnaireAIFR;
+      dictInformal = DictionnaireInFormelFR;
+      dictFormal = DictionnaireFormelFR;
+      dictAdjFemale = AdjectifsFemininsFR;
+      dictAdjMale = AdjectifsMasculinsFR;
+      } else if (currentLang === 'ma') {
+      dictAI = DictionnaireAIFR;
+      dictInformal = InformalMA_Expanded;
+      dictFormal = FormalMA_Expanded;
+      dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesMA_Expanded).filter(([_, v]) => v < 0));
+      dictAdjMale = Object.fromEntries(Object.entries(AdjectivesMA_Expanded).filter(([_, v]) => v > 0));
+      } else if (currentLang === 'he') {
+      dictAI = DictionnaireAIEN;
+      dictInformal = InformalHE_Expanded;
+      dictFormal = FormalHE_Expanded;
+      dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesHE_Expanded).filter(([_, v]) => v < 0));
+      dictAdjMale = Object.fromEntries(Object.entries(AdjectivesHE_Expanded).filter(([_, v]) => v > 0));
+      } else if (currentLang === 'es') {
+      dictAI = DictionnaireAIEN;
+      dictInformal = InformalES_Expanded;
+      dictFormal = FormalES_Expanded;
+      dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesES_Expanded).filter(([_, v]) => v < 0));
+      dictAdjMale = Object.fromEntries(Object.entries(AdjectivesES_Expanded).filter(([_, v]) => v > 0));
+      } else if (currentLang === 'de') {
+      dictAI = DictionnaireAIEN;
+      dictInformal = InformalDE_Expanded;
+      dictFormal = FormalDE_Expanded;
+      dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesDE_Expanded).filter(([_, v]) => v < 0));
+      dictAdjMale = Object.fromEntries(Object.entries(AdjectivesDE_Expanded).filter(([_, v]) => v > 0));
+      } else if (currentLang === 'tr') {
+      dictAI = DictionnaireAIEN;
+      dictInformal = InformalTR_Expanded;
+      dictFormal = FormalTR_Expanded;
+      dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesTR_Expanded).filter(([_, v]) => v < 0));
+      dictAdjMale = Object.fromEntries(Object.entries(AdjectivesTR_Expanded).filter(([_, v]) => v > 0));
+      } else if (currentLang === 'pt') {
+      dictAI = DictionnaireAIEN;
+      dictInformal = InformalPT_Expanded;
+      dictFormal = FormalPT_Expanded;
+      dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesPT_Expanded).filter(([_, v]) => v < 0));
+      dictAdjMale = Object.fromEntries(Object.entries(AdjectivesPT_Expanded).filter(([_, v]) => v > 0));
+      } else if (currentLang === 'hi') {
+      dictAI = DictionnaireAIEN;
+      dictInformal = InformalHI_Expanded;
+      dictFormal = FormalHI_Expanded;
+      dictAdjFemale = Object.fromEntries(Object.entries(AdjectivesHI_Expanded).filter(([_, v]) => v < 0));
+      dictAdjMale = Object.fromEntries(Object.entries(AdjectivesHI_Expanded).filter(([_, v]) => v > 0));
+      }
       
       if (text) {
       words.forEach(word => {
@@ -490,6 +536,8 @@
         if (dictFormal[word] > 0) formalMale += dictFormal[word];
         else formalFemale += Math.abs(dictFormal[word]);
       }
+      if (dictAdjFemale[word]) informalFemale += Math.abs(dictAdjFemale[word]); // Add to informal female score
+      if (dictAdjMale[word]) informalMale += dictAdjMale[word]; // Add to informal male score
       });
       }
       
@@ -498,12 +546,12 @@
       const aiVerdict = aiScore > 100 ? uiTexts[currentLang].likelyAI : uiTexts[currentLang].likelyHuman;
       
       const informalDifference = informalMale - informalFemale;
-      const informalMax = Math.max(informalMale, informalFemale) || 1; // Avoid division by 0
+      const informalMax = Math.max(informalMale, informalFemale) || 1;
       const informalPercentage = ((Math.abs(informalDifference) / informalMax) * 100).toFixed(1);
       const informalVerdict = informalDifference > 0 ? uiTexts[currentLang].male : informalDifference < 0 ? uiTexts[currentLang].female : uiTexts[currentLang].unknown;
       
       const formalDifference = formalMale - formalFemale;
-      const formalMax = Math.max(formalMale, formalFemale) || 1; // Avoid division by 0
+      const formalMax = Math.max(formalMale, formalFemale) || 1;
       const formalPercentage = ((Math.abs(formalDifference) / formalMax) * 100).toFixed(1);
       const formalVerdict = formalDifference > 0 ? uiTexts[currentLang].male : formalDifference < 0 ? uiTexts[currentLang].female : uiTexts[currentLang].unknown;
       
@@ -538,7 +586,6 @@
       `;
       document.getElementById('results').innerHTML = results;
       }
-      
       // Initialize with default language
       setLanguage('en');
     </script>
