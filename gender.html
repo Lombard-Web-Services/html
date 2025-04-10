@@ -1,28 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gender Guesser</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    * {
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gender Guesser</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Montserrat', sans-serif;
-    }
-
-    body {
+      }
+      body {
       background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 20px;
-    }
-
-    .container {
+      }
+      .container {
       position: relative;
       background: white;
       border-radius: 15px;
@@ -33,12 +31,14 @@
       display: flex;
       flex-direction: column;
       gap: 30px;
-    }
-
-    .lang-switch {
+      }
+      /* Dropdown Menu Styles */
+      .dropdown {
       position: absolute;
       top: 20px;
       right: 20px;
+      }
+      .dropdown-btn {
       padding: 8px 15px;
       border: none;
       border-radius: 20px;
@@ -50,39 +50,67 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      transition: transform 0.2s ease;
-    }
-
-    .lang-switch:hover {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .dropdown-btn:hover {
       transform: translateY(-2px);
-    }
-
-    .flag {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+      .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      min-width: 160px;
+      z-index: 1;
+      overflow: hidden;
+      }
+      .dropdown-content a {
+      color: #333;
+      padding: 10px 15px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      transition: background 0.3s ease;
+      }
+      .dropdown-content a:hover {
+      background: linear-gradient(45deg, #6a82fb, #fc5c7d);
+      color: white;
+      }
+      .dropdown:hover .dropdown-content {
+      display: block;
+      }
+      .flag {
       width: 20px;
       height: 20px;
       display: inline-block;
       vertical-align: middle;
-    }
-
-    h1 {
+      }
+      /* Gradient Title */
+      h1.gradient-title {
       font-size: 32px;
       font-weight: 600;
-      color: #333;
       text-align: center;
-    }
-
-    p {
+      background: linear-gradient(45deg, #6a82fb, #fc5c7d);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      }
+      p {
       font-size: 16px;
       color: #666;
       text-align: center;
       line-height: 1.5;
-    }
-
-    .textarea-container {
+      }
+      .textarea-container {
       position: relative;
-    }
-
-    textarea {
+      }
+      textarea {
       width: 100%;
       height: 180px;
       padding: 15px;
@@ -93,29 +121,25 @@
       color: #333;
       background: #fafafa;
       transition: border-color 0.3s ease;
-    }
-
-    textarea:focus {
+      }
+      textarea:focus {
       border-color: #6a82fb;
       outline: none;
-    }
-
-    #word-count {
+      }
+      #word-count {
       font-size: 14px;
       color: #888;
       text-align: right;
       margin-top: 5px;
-    }
-
-    .button-group {
+      }
+      .button-group {
       display: flex;
       gap: 15px;
       justify-content: center;
       flex-wrap: wrap;
       margin-top: 20px;
-    }
-
-    input[type="button"] {
+      }
+      input[type="button"] {
       padding: 12px 30px;
       border: none;
       border-radius: 25px;
@@ -124,26 +148,21 @@
       color: white;
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    input[type="button"]:hover {
+      }
+      input[type="button"]:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    input[value="Analyze"], input[value="Analyser"] {
+      }
+      input[value="Analyze"], input[value="Analyser"], input[value="تحليل"], input[value="נתח"], input[value="Analizar"], input[value="Analysieren"], input[value="Analiz"], input[value="Analisar"], input[value="विश्लेषण"] {
       background: linear-gradient(45deg, #6a82fb, #fc5c7d);
-    }
-
-    input[value="Clear"], input[value="Effacer"] {
+      }
+      input[value="Clear"], input[value="Effacer"], input[value="مسح"], input[value="נקה"], input[value="Borrar"], input[value="Löschen"], input[value="Temizle"], input[value="Limpar"], input[value="साफ"] {
       background: linear-gradient(45deg, #ff6b6b, #ff8e53);
-    }
-
-    input[value="About"], input[value="À propos"] {
+      }
+      input[value="About"], input[value="À propos"], input[value="حول"], input[value="אודות"], input[value="Acerca"], input[value="Über"], input[value="Hakkında"], input[value="Sobre"], input[value="के_बारे_में"] {
       background: linear-gradient(45deg, #4facfe, #00f2fe);
-    }
-
-    #results {
+      }
+      #results {
       margin-top: 30px;
       padding: 20px;
       background: #fff;
@@ -152,342 +171,321 @@
       font-size: 14px;
       color: #444;
       white-space: pre-wrap;
-    }
-
-    #results h2 {
+      }
+      #results h2 {
       font-size: 20px;
       font-weight: 600;
       color: #6a82fb;
       margin-bottom: 10px;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 20px;
       }
-      .lang-switch {
-        top: 15px;
-        right: 15px;
-        padding: 6px 12px;
-        font-size: 12px;
+      /* Copyright */
+      .copyright {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      }
+      .copyright a {
+      color: #6a82fb;
+      text-decoration: none;
+      }
+      .copyright a:hover {
+      text-decoration: underline;
+      }
+      @media (max-width: 600px) {
+      .container {
+      padding: 20px;
+      }
+      .dropdown-btn {
+      padding: 6px 12px;
+      font-size: 12px;
       }
       .flag {
-        width: 16px;
-        height: 16px;
+      width: 16px;
+      height: 16px;
       }
-      h1 {
-        font-size: 26px;
+      h1.gradient-title {
+      font-size: 26px;
       }
       p {
-        font-size: 14px;
+      font-size: 14px;
       }
       textarea {
-        height: 140px;
-        font-size: 14px;
+      height: 140px;
+      font-size: 14px;
       }
       #word-count {
-        font-size: 12px;
+      font-size: 12px;
       }
       .button-group {
-        gap: 10px;
-        margin-top: 15px;
+      gap: 10px;
+      margin-top: 15px;
       }
       input[type="button"] {
-        padding: 10px 20px;
-        font-size: 14px;
+      padding: 10px 20px;
+      font-size: 14px;
       }
       #results {
-        margin-top: 20px;
-        padding: 15px;
-        font-size: 13px;
+      margin-top: 30px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+      font-size: 16px;
+      color: #444;
+      white-space: pre-wrap;
+      }
+      .section-title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, #6a82fb, #fc5c7d);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      }
+      .result-box {
+      background: linear-gradient(135deg, #f9f9f9, #e9ecef);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      margin: 0 auto;
+      max-width: 600px;
+      }
+      .result-box p {
+      font-size: 20px;
+      line-height: 1.6;
+      margin: 10px 0;
+      }
+      .result-box .big-number {
+      font-size: 24px;
+      font-weight: 600;
+      color: #6a82fb;
+      }
+      .separator {
+      width: 80%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #6a82fb, transparent);
+      margin: 30px auto;
       }
       #results h2 {
-        font-size: 18px;
+      font-size: 18px;
       }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <button class="lang-switch" onclick="toggleLanguage()">
-      <span id="flag" class="flag">
-        <svg width="20" height="20" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
-          <rect width="60" height="30" fill="#012169"/>
-          <path d="M0 0L60 30M60 0L0 30" stroke="#FFF" stroke-width="6"/>
-          <path d="M0 0L60 30M60 0L0 30" stroke="#C8102E" stroke-width="4"/>
-          <path d="M30 0V30M0 15H60" stroke="#FFF" stroke-width="10"/>
-          <path d="M30 0V30M0 15H60" stroke="#C8102E" stroke-width="6"/>
-        </svg>
-      </span> English
-    </button>
-    <h1 id="title">Text Analyzer</h1>
-    <p id="instructions">Type or paste a writing sample for gender and AI analysis.<br>For best results, use at least 300 words.</p>
-    <form name="Counter">
-      <div class="textarea-container">
-        <textarea name="Text" placeholder="Enter your text here..." oninput="updateWordCount(this)"></textarea>
-        <div id="word-count">0 words</div>
+      .copyright {
+      font-size: 10px;
+      }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Dropdown Menu -->
+      <div class="dropdown">
+        <button class="dropdown-btn">
+          <span id="flag" class="flag">
+            <svg width="20" height="20" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
+              <rect width="60" height="30" fill="#012169"/>
+              <path d="M0 0L60 30M60 0L0 30" stroke="#FFF" stroke-width="6"/>
+              <path d="M0 0L60 30M60 0L0 30" stroke="#C8102E" stroke-width="4"/>
+              <path d="M30 0V30M0 15H60" stroke="#FFF" stroke-width="10"/>
+              <path d="M30 0V30M0 15H60" stroke="#C8102E" stroke-width="6"/>
+            </svg>
+          </span>
+          English
+        </button>
+        <div class="dropdown-content" id="lang-dropdown">
+          <a href="#" onclick="setLanguage('en')"><span class="flag" id="flag-en"></span> English</a>
+          <a href="#" onclick="setLanguage('fr')"><span class="flag" id="flag-fr"></span> Français</a>
+          <a href="#" onclick="setLanguage('ma')"><span class="flag" id="flag-ma"></span> العربية</a>
+          <a href="#" onclick="setLanguage('he')"><span class="flag" id="flag-he"></span> עברית</a>
+          <a href="#" onclick="setLanguage('es')"><span class="flag" id="flag-es"></span> Español</a>
+          <a href="#" onclick="setLanguage('de')"><span class="flag" id="flag-de"></span> Deutsch</a>
+          <a href="#" onclick="setLanguage('tr')"><span class="flag" id="flag-tr"></span> Türkçe</a>
+          <a href="#" onclick="setLanguage('pt')"><span class="flag" id="flag-pt"></span> Português</a>
+          <a href="#" onclick="setLanguage('hi')"><span class="flag" id="flag-hi"></span> हिन्दी</a>
+        </div>
       </div>
-      <div class="button-group">
-        <input type="button" value="Analyze" id="analyze-btn" onclick="GenderWords(this.form)">
-        <input type="button" value="Clear" id="clear-btn" onclick="ClearForm(this.form)">
-        <input type="button" value="About" id="about-btn" onclick="alert('A simple tool to detect AI-generated text and predict gender. By thibaut LOMBARD (Lombar dWeb [@lombardweb])')">
+      <h1 id="title" class="gradient-title">Text Analyzer</h1>
+      <p id="instructions">Type or paste a writing sample for gender and AI analysis.<br>For best results, use at least 300 words.</p>
+      <form name="Counter">
+        <div class="textarea-container">
+          <textarea name="Text" placeholder="Enter your text here..." oninput="updateWordCount(this)"></textarea>
+          <div id="word-count">0 words</div>
+        </div>
+        <div class="button-group">
+          <input type="button" value="Analyze" id="analyze-btn" onclick="GenderWords(this.form)">
+          <input type="button" value="Clear" id="clear-btn" onclick="ClearForm(this.form)">
+          <input type="button" value="About" id="about-btn" onclick="showAbout()">
+        </div>
+        <div id="results"></div>
+      </form>
+      <div class="copyright">
+        © 2025 Thibaut LOMBARD (<a href="https://twitter.com/lombardweb" target="_blank">@lombardweb</a>)
       </div>
-      <div id="results"></div>
-    </form>
-  </div>
-
-  <script>
-    let currentLang = 'en';
-
-    // Updated English AI Dictionary
-    const DictionnaireAIEN = {
-      'data': 20, 'system': 22, 'model': 21, 'algorithm': 23, 'learning': 20, 'generate': 25,
-      'process': 18, 'analysis': 17, 'synthesis': 18, 'network': 19, 'neural': 20, 'optimization': 16,
-      'parameters': 15, 'function': 12, 'intelligence': 19, 'artificial': 20, 'prediction': 18,
-      'classification': 17, 'recognition': 16, 'automatic': 18, 'computational': 15, 'iterative': 14,
-      'convergence': 13, 'metric': 12, 'evaluation': 14, 'performance': 15, 'implementation': 13,
-      'architecture': 16, 'transformer': 17, 'bias': 11, 'robustness': 12, 'interpretability': 10,
-      'training': 18, 'validation': 15, 'test': 14, 'inference': 13, 'corpus': 16, 'semantic': 14,
-      'syntactic': 13, 'contextual': 15, 'vector': 12, 'embedding': 14, 'latent': 11,
-      'probability': 13, 'distribution': 12, 'normalization': 11, 'regularization': 10, 'gradient': 13,
-      'backpropagation': 12, 'hyperparameters': 11, 'deep learning': 24, 'natural language processing': 26,
-      'computer vision': 23, 'machine learning': 25, 'large language model': 27, 'prompt engineering': 22,
-      'zero-shot': 21, 'few-shot': 20, 'fine-tuning': 19, 'reinforcement learning': 23,
-      'generative adversarial network': 24, 'perplexity': 15, 'tokenization': 14, 'embeddings': 16,
-      'pretrained': 17
-    };
-
-    // Other English Dictionaries
-    const DictionnaireInFormelEN = {
-      'actually': -49, 'am': -42, 'as': 37, 'because': -55, 'but': -43, 'ever': 21, 'everything': -44,
-      'good': 31, 'has': -33, 'him': -73, 'if': 25, 'in': 10, 'is': 19, 'like': -43, 'more': -41,
-      'now': 33, 'out': -39, 'since': -25, 'so': -64, 'some': 58, 'something': 26, 'the': 17,
-      'this': 44, 'too': -38, 'well': 15
-    };
-
-    const DictionnaireFormelEN = {
-      'a': 6, 'above': 4, 'and': -4, 'are': 28, 'around': 42, 'as': 23, 'at': 6, 'be': -17, 'below': 8,
-      'her': -9, 'hers': -3, 'if': -47, 'is': 8, 'it': 6, 'many': 6, 'me': -4, 'more': 34, 'myself': -4,
-      'not': -27, 'said': 5, 'she': -6, 'should': -7, 'the': 7, 'these': 8, 'to': 2, 'was': -1, 'we': -8,
-      'what': 35, 'when': -17, 'where': -18, 'who': 19, 'with': -52, 'your': -17
-    };
-
-    // French Dictionaries
-    const DictionnaireInFormelFR = {
-      'en_fait': -5, 'suis': -2, 'comme': 3, 'parce_que': -4, 'mais': -3, 'jamais': 2, 'tout': -2,
-      'bon': 5, 'a': -1, 'lui': 50, 'si': 4, 'dans': 2, 'est': 1, 'genre': -7, 'plus': 3,
-      'maintenant': 2, 'dehors': 3, 'depuis': -2, 'tellement': -5, 'quelques': 4, 'quelque_chose': 1,
-      'le': 3, 'ceci': 2, 'trop': 0, 'bien': 4, 'hein': 4, 'tu': -2, 'ouais': 3,
-      'putain': -12, 'mec': 25, 'nana': -20, 'sérieux': 3, 'grave': 2, 'chouette': -4, 'super': -3,
-      'cool': 1, 'nan': -2, 'tu vois': -4, 'en mode': -6, 'franchement': -2, 'quoi': 0
-    };
-
-    const DictionnaireFormelFR = {
-      'un': 4, 'une': -4, 'au_dessus': 4, 'et': -3, 'sont': 6, 'autour': 5, 'comme': 3, 'à': 2,
-      'être': -4, 'sous': 3, 'il': 65, 'elle': -65, 'son': 12, 'sa': -12, 'ses': 0, 'si': -6,
-      'est': 2, 'plusieurs': 3, 'moi': -2, 'davantage': 4, 'moi_même': -1, 'ne': -2, 'pas': -3,
-      'dit': 2, 'devrait': -2, 'le': 5, 'la': -5, 'les': 0, 'pour': 1, 'était': 2, 'nous': -4,
-      'quoi': 5, 'quand': -3, 'où': -2, 'qui': 4, 'avec': -6, 'votre': -1, 'leur': 0,
-      'celui': 10, 'celle': -10, 'ceux': 5, 'celles': -5, 'monsieur': 30, 'madame': -30,
-      'mademoiselle': -25, 'il a': 15, 'elle a': -15, 'été': 2, 'faite': -3, 'fait': 3,
-      'disait': 1, 'ajoutait': 1, 'soulignait': 1, 'notait': 1, 'observait': -1, 'expliquait': -1,
-      'pensait': -1, 'trouvait': -1
-    };
-
-    const AdjectifsFemininsFR = {
-      'belle': -15, 'jolie': -12, 'élégante': -10, 'douce': -8, 'charmante': -9, 'passionnée': -7,
-      'sensible': -6, 'attentive': -7, 'émotive': -6, 'compréhensive': -5, 'sincère': -4,
-      'ouverte': -5, 'curieuse': -4, 'créative': -5, 'intuitive': -4, 'délicate': -6,
-      'ravissante': -11, 'lumineuse': -7, 'fraîche': -6, 'vive': -5, 'forte': -3,
-      'intelligente': -4, 'ambitieuse': -3
-    };
-
-    const AdjectifsMasculinsFR = {
-      'beau': 15, 'joli': 12, 'élégant': 10, 'doux': 8, 'charmant': 9, 'passionné': 7,
-      'sensible': 6, 'attentif': 7, 'émotif': 6, 'compréhensif': 5, 'sincère': 4,
-      'ouvert': 5, 'curieux': 4, 'créatif': 5, 'intuitif': 4, 'délicat': 6,
-      'ravissant': 11, 'lumineux': 7, 'frais': 6, 'vif': 5, 'fort': 3,
-      'intelligent': 4, 'ambitieux': 3
-    };
-
-    const DictionnaireAIFR = {
-      'données': 25, 'système': 25, 'modèle': 23, 'algorithme': 24, 'apprentissage': 22, 'générer': 28,
-      'traitement': 20, 'analyse': 18, 'synthèse': 19, 'réseau': 21, 'neuronal': 22, 'optimisation': 17,
-      'paramètres': 16, 'fonction': 12, 'intelligence': 20, 'artificielle': 21, 'prédiction': 19,
-      'classification': 18, 'reconnaissance': 17, 'automatique': 19, 'computationnel': 16, 'itératif': 15,
-      'convergence': 14, 'métrique': 13, 'évaluation': 15, 'performance': 16, 'implémentation': 14,
-      'architecture': 17, 'transformer': 18, 'biais': 12, 'robustesse': 13, 'interprétabilité': 11,
-      'entraînement': 19, 'validation': 16, 'test': 15, 'inférence': 14, 'corpus': 17, 'sémantique': 15,
-      'syntaxique': 14, 'contextuel': 16, 'vectoriel': 13, 'embedding': 15, 'latent': 12,
-      'probabilité': 14, 'distribution': 13, 'normalisation': 12, 'régularisation': 11, 'gradient': 14,
-      'rétropropagation': 13, 'hyperparamètres': 12, 'apprentissage profond': 25,
-      'traitement du langage naturel': 27, 'vision par ordinateur': 24
-    };
-
-    function toggleLanguage() {
-      currentLang = currentLang === 'en' ? 'fr' : 'en';
-      const flag = document.getElementById('flag');
-      const switchBtn = document.querySelector('.lang-switch');
-      const title = document.getElementById('title');
-      const instructions = document.getElementById('instructions');
-      const analyzeBtn = document.getElementById('analyze-btn');
-      const clearBtn = document.getElementById('clear-btn');
-      const aboutBtn = document.getElementById('about-btn');
-
-      if (currentLang === 'en') {
-        flag.innerHTML = `<svg width="20" height="20" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
-          <rect width="60" height="30" fill="#012169"/>
-          <path d="M0 0L60 30M60 0L0 30" stroke="#FFF" stroke-width="6"/>
-          <path d="M0 0L60 30M60 0L0 30" stroke="#C8102E" stroke-width="4"/>
-          <path d="M30 0V30M0 15H60" stroke="#FFF" stroke-width="10"/>
-          <path d="M30 0V30M0 15H60" stroke="#C8102E" stroke-width="6"/>
-        </svg>`;
-        switchBtn.innerHTML = '<span id="flag" class="flag">' + flag.innerHTML + '</span> English';
-        title.textContent = "Text Analyzer";
-        instructions.innerHTML = "Type or paste a writing sample for gender and AI analysis.<br>For best results, use at least 300 words.";
-        analyzeBtn.value = "Analyze";
-        clearBtn.value = "Clear";
-        aboutBtn.value = "About";
-        aboutBtn.onclick = () => alert('A simple tool to detect AI-generated text and predict gender. Built with love!');
-      } else {
-        flag.innerHTML = `<svg width="20" height="20" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg">
-          <rect width="10" height="20" fill="#0055A4"/>
-          <rect x="10" width="10" height="20" fill="#FFFFFF"/>
-          <rect x="20" width="10" height="20" fill="#EF4135"/>
-        </svg>`;
-        switchBtn.innerHTML = '<span id="flag" class="flag">' + flag.innerHTML + '</span> Français';
-        title.textContent = "Analyseur de Texte";
-        instructions.innerHTML = "Tapez ou collez un échantillon de texte pour une analyse de genre et d'IA.<br>Pour de meilleurs résultats, utilisez au moins 300 mots.";
-        analyzeBtn.value = "Analyser";
-        clearBtn.value = "Effacer";
-        aboutBtn.value = "À propos";
-        aboutBtn.onclick = () => alert('Un outil simple pour détecter les textes générés par IA et prédire le genre. Construit avec amour !');
+    </div>
+    <script>
+      let currentLang = 'en';
+      const languages = ['en', 'fr', 'ma', 'he', 'es', 'de', 'tr', 'pt', 'hi'];
+      
+      // Language-specific UI texts
+      const uiTexts = {
+        en: { title: "Text Analyzer", instructions: "Type or paste a writing sample for gender and AI analysis.\nFor best results, use at least 300 words.", analyze: "Analyze", clear: "Clear", about: "About", aboutMsg: "A simple tool to detect AI-generated text and predict gender. Built with love!", words: "words", analysisSummary: "Analysis Summary", totalWords: "Total words", tooFewWords: "Too few words. Try 300 words or more.", aiDetection: "AI Detection", aiScore: "AI Score", verdict: "Verdict", likelyAI: "Likely AI-generated", likelyHuman: "Likely human-written", genderPrediction: "Gender Prediction", genderPredictionInformal: "Gender Prediction: Informal", genderPredictionFormal: "Gender Prediction: Formal", female: "Female", male: "Male", difference: "Difference", unknown: "unknown", weak: "Weak", weakEmphasis: "Weak emphasis could indicate European." },
+        fr: { title: "Analyseur de texte", instructions: "Tapez ou collez un échantillon de texte pour une analyse de genre et d'IA.\nPour de meilleurs résultats, utilisez au moins 300 mots.", analyze: "Analyser", clear: "Effacer", about: "À propos", aboutMsg: "Un outil simple pour détecter les textes générés par IA et prédire le genre. Construit avec amour !", words: "mots", analysisSummary: "Résumé de l'analyse", totalWords: "Nombre total de mots", tooFewWords: "Trop peu de mots. Essayez 300 mots ou plus.", aiDetection: "Détection IA", aiScore: "Score IA", verdict: "Verdict", likelyAI: "Probablement généré par IA", likelyHuman: "Probablement écrit par un humain", genderPrediction: "Prédiction de genre", genderPredictionInformal: "Prédiction de genre : Informel", genderPredictionFormal: "Prédiction de genre : Formel", female: "Féminin", male: "Masculin", difference: "Différence", unknown: "inconnu", weak: "Faible", weakEmphasis: "Un faible accent pourrait indiquer un Européen." },
+        ma: { title: "محلل النصوص", instructions: "كتب أو لصق عينة كتابة لتحليل الجنس والذكاء الاصطناعي.\nللحصول على أفضل النتائج، استخدم 300 كلمة على الأقل.", analyze: "تحليل", clear: "مسح", about: "حول", aboutMsg: "أداة بسيطة للكشف عن النصوص المولدة بالذكاء الاصطناعي والتنبؤ بالجنس. تم بناؤها بحب!", words: "كلمات", analysisSummary: "ملخص التحليل", totalWords: "إجمالي الكلمات", tooFewWords: "كلمات قليلة جدًا. جرب 300 كلمة أو أكثر.", aiDetection: "كشف الذكاء الاصطناعي", aiScore: "درجة الذكاء الاصطناعي", verdict: "الحكم", likelyAI: "من المحتمل أن يكون مولدًا بالذكاء الاصطناعي", likelyHuman: "من المحتمل أن يكون مكتوبًا بواسطة إنسان", genderPrediction: "ال要件 بالجنس", genderPredictionInformal: "التنبؤ بالجنس: غير رسمي", genderPredictionFormal: "التنبؤ بالجنس: رسمي", female: "أنثى", male: "ذكر", difference: "الفرق", unknown: "غير معروف", weak: "ضعيف", weakEmphasis: "التأكيد الضعيف قد يشير إلى أوروبي." },
+        he: { title: "מנתח טקסט", instructions: "הקלד או הדבק דוגמת כתיבה לניתוח מגדר ו-AI.\nלקבלת התוצאות הטובות ביותר, השתמש בלפחות 300 מילים.", analyze: "נתח", clear: "נקה", about: "אודות", aboutMsg: "כלי פשוט לזיהוי טקסט שנוצר על ידי AI ולחיזוי מגדר. נבנה באהבה!", words: "מילים", analysisSummary: "סיכום ניתוח", totalWords: "סך כל המילים", tooFewWords: "מעט מדי מילים. נסה 300 מילים או יותר.", aiDetection: "זיהוי AI", aiScore: "ציון AI", verdict: "פסק דין", likelyAI: "סביר להניח שנוצר על ידי AI", likelyHuman: "סביר להניח שנכתב על ידי אדם", genderPrediction: "חיזוי מגדר", genderPredictionInformal: "חיזוי מגדר: לא רשמי", genderPredictionFormal: "חיזוי מגדר: רשמי", female: "נקבה", male: "זכר", difference: "הבדל", unknown: "לא ידוע", weak: "חלש", weakEmphasis: "הדגשה חלשה עשויה להצביע על אירופאי." },
+        es: { title: "Analizador de texto", instructions: "Escribe o pega una muestra de escritura para análisis de género e IA.\nPara mejores resultados, usa al menos 300 palabras.", analyze: "Analizar", clear: "Borrar", about: "Acerca", aboutMsg: "Una herramienta simple para detectar texto generado por IA y predecir género. ¡Construida con amor!", words: "palabras", analysisSummary: "Resumen del análisis", totalWords: "Total de palabras", tooFewWords: "Demasiado pocas palabras. Prueba con 300 palabras o más.", aiDetection: "Detección de IA", aiScore: "Puntuación de IA", verdict: "Veredicto", likelyAI: "Probablemente generado por IA", likelyHuman: "Probablemente escrito por humano", genderPrediction: "Predicción de género", genderPredictionInformal: "Predicción de género: Informal", genderPredictionFormal: "Predicción de género: Formal", female: "Femenino", male: "Masculino", difference: "Diferencia", unknown: "desconocido", weak: "Débil", weakEmphasis: "Énfasis débil podría indicar europeo." },
+        de: { title: "Textanalysator", instructions: "Tippe oder füge eine Schreibprobe für Geschlechts- und KI-Analyse ein.\nFür beste Ergebnisse verwende mindestens 300 Wörter.", analyze: "Analysieren", clear: "Löschen", about: "Über", aboutMsg: "Ein einfaches Tool zur Erkennung von KI-generiertem Text und zur Geschlechtsvorhersage. Mit Liebe gebaut!", words: "Wörter", analysisSummary: "Analyseübersicht", totalWords: "Gesamtzahl der Wörter", tooFewWords: "Zu wenige Wörter. Versuche 300 Wörter oder mehr.", aiDetection: "KI-Erkennung", aiScore: "KI-Punktzahl", verdict: "Urteil", likelyAI: "Wahrscheinlich KI-generiert", likelyHuman: "Wahrscheinlich von Menschen geschrieben", genderPrediction: "Geschlechtsvorhersage", genderPredictionInformal: "Geschlechtsvorhersage: Informell", genderPredictionFormal: "Geschlechtsvorhersage: Formell", female: "Weiblich", male: "Männlich", difference: "Unterschied", unknown: "unbekannt", weak: "Schwach", weakEmphasis: "Schwache Betonung könnte auf Europäer hinweisen." },
+        tr: { title: "Metin Analizörü", instructions: "Cinsiyet ve yapay zeka analizi için bir yazı örneği yaz veya yapıştır.\nEn iyi sonuçlar için en az 300 kelime kullan.", analyze: "Analiz", clear: "Temizle", about: "Hakkında", aboutMsg: "Yapay zeka tarafından oluşturulan metni tespit etmek ve cinsiyet tahmini yapmak için basit bir araç. Sevgiyle inşa edildi!", words: "kelimeler", analysisSummary: "Analiz Özeti", totalWords: "Toplam kelime", tooFewWords: "Çok az kelime. 300 kelime veya daha fazlasını dene.", aiDetection: "Yapay Zeka Tespiti", aiScore: "Yapay Zeka Skoru", verdict: "Karar", likelyAI: "Muhtemelen yapay zeka tarafından oluşturulmuş", likelyHuman: "Muhtemelen insan tarafından yazılmış", genderPrediction: "Cinsiyet Tahmini", genderPredictionInformal: "Cinsiyet Tahmini: Gayriresmi", genderPredictionFormal: "Cinsiyet Tahmini: Resmi", female: "Kadın", male: "Erkek", difference: "Fark", unknown: "bilinmeyen", weak: "Zayıf", weakEmphasis: "Zayıf vurgu Avrupalıyı işaret edebilir." },
+        pt: { title: "Analisador de Texto", instructions: "Digite ou cole uma amostra de escrita para análise de gênero e IA.\nPara melhores resultados, use pelo menos 300 palavras.", analyze: "Analisar", clear: "Limpar", about: "Sobre", aboutMsg: "Uma ferramenta simples para detectar texto gerado por IA e prever gênero. Construída com amor!", words: "palavras", analysisSummary: "Resumo da Análise", totalWords: "Total de palavras", tooFewWords: "Muito poucas palavras. Tente 300 palavras ou mais.", aiDetection: "Detecção de IA", aiScore: "Pontuação de IA", verdict: "Veredito", likelyAI: "Provavelmente gerado por IA", likelyHuman: "Provavelmente escrito por humano", genderPrediction: "Previsão de Gênero", genderPredictionInformal: "Previsão de Gênero: Informal", genderPredictionFormal: "Previsão de Gênero: Formal", female: "Feminino", male: "Masculino", difference: "Diferença", unknown: "desconhecido", weak: "Fraco", weakEmphasis: "Ênfase fraca pode indicar europeu." },
+        hi: { title: "पाठ विश्लेषक", instructions: "लिंग और AI विश्लेषण के लिए एक लेखन नमूना टाइप करें या चिपकाएं।\nसर्वोत्तम परिणामों के लिए कम से कम 300 शब्दों का उपयोग करें।", analyze: "विश्लेषण", clear: "साफ", about: "के_बारे_में", aboutMsg: "AI-जनरेटेड टेक्स्ट का पता लगाने और लिंग की भविष्यवाणी करने के लिए एक सरल उपकरण। प्यार से बनाया गया!", words: "शब्द", analysisSummary: "विश्लेषण सारांश", totalWords: "कुल शब्द", tooFewWords: "बहुत कम शब्द। 300 शब्द या अधिक आज़माएं।", aiDetection: "AI डिटेक्शन", aiScore: "AI स्कोर", verdict: "निर्णय", likelyAI: "संभवतः AI द्वारा उत्पन्न", likelyHuman: "संभवतः मानव द्वारा लिखित", genderPrediction: "लिंग भविष्यवाणी", genderPredictionInformal: "लिंग भविष्यवाणी: अनौपचारिक", genderPredictionFormal: "लिंग भविष्यवाणी: औपचारिक", female: "महिला", male: "पुरुष", difference: "अंतर", unknown: "अज्ञात", weak: "कमजोर", weakEmphasis: "कमजोर जोर यूरोपीय को संकेत दे सकता है।" }
+      };
+      
+      // Flag SVGs for each language
+      const flags = {
+        en: `<svg width="20" height="20" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0 0L60 30M60 0L0 30" stroke="#FFF" stroke-width="6"/><path d="M0 0L60 30M60 0L0 30" stroke="#C8102E" stroke-width="4"/><path d="M30 0V30M0 15H60" stroke="#FFF" stroke-width="10"/><path d="M30 0V30M0 15H60" stroke="#C8102E" stroke-width="6"/></svg>`,
+        fr: `<svg width="20" height="20" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="10" height="20" fill="#0055A4"/><rect x="10" width="10" height="20" fill="#FFFFFF"/><rect x="20" width="10" height="20" fill="#EF4135"/></svg>`,
+        ma: `<svg width="20" height="20" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#C1272D"/><path d="M15 5L17.5 10L22 11L18.5 14L19 18L15 16L11 18L11.5 14L8 11L12.5 10Z" fill="#008000"/></svg>`,
+        he: `<svg width="20" height="20" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#FFF"/><rect y="3" width="30" height="4" fill="#003087"/><rect y="13" width="30" height="4" fill="#003087"/><path d="M15 10L17 12L13 12ZM15 10L17 8L13 8ZM15 10L18 13L12 13ZM15 10L18 7L12 7Z" fill="#003087"/></svg>`,
+        es: `<svg width="20" height="20" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="5" fill="#C60B1E"/><rect y="5" width="30" height="10" fill="#FFC107"/><rect y="15" width="30" height="5" fill="#C60B1E"/></svg>`,
+        de: `<svg width="20" height="20" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="6.67" fill="#000"/><rect y="6.67" width="30" height="6.67" fill="#D00"/><rect y="13.34" width="30" height="6.66" fill="#FFCE00"/></svg>`,
+        tr: `<svg width="20" height="20" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="20" fill="#E30A17"/><circle cx="12" cy="10" r="5" fill="#FFF"/><circle cx="13" cy="10" r="4" fill="#E30A17"/><path d="M17 10L19 12L21 10L19 8Z" fill="#FFF"/></svg>`,
+        pt: `<svg width="20" height="20" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="20" fill="#006600"/><rect x="12" width="18" height="20" fill="#FF0000"/><circle cx="12" cy="10" r="5" fill="#FFFF00"/></svg>`,
+        hi: `<svg width="20" height="20" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="6.67" fill="#FF9933"/><rect y="6.67" width="30" height="6.66" fill="#FFF"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="3" fill="#000080"/></svg>`
+      };
+      document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('flag-en').innerHTML = flags.en;
+      document.getElementById('flag-fr').innerHTML = flags.fr;
+      document.getElementById('flag-ma').innerHTML = flags.ma;
+      document.getElementById('flag-he').innerHTML = flags.he;
+      document.getElementById('flag-es').innerHTML = flags.es;
+      document.getElementById('flag-de').innerHTML = flags.de;
+      document.getElementById('flag-tr').innerHTML = flags.tr;
+      document.getElementById('flag-pt').innerHTML = flags.pt;
+      document.getElementById('flag-hi').innerHTML = flags.hi;
+      });
+      // Dictionaries (as provided in your updated data)
+      const DictionnaireAIEN = { 'data': 20, 'system': 22, 'model': 21, 'algorithm': 23, 'learning': 20, 'generate': 25, 'process': 18, 'analysis': 17, 'synthesis': 18, 'network': 19, 'neural': 20, 'optimization': 16, 'parameters': 15, 'function': 12, 'intelligence': 19, 'artificial': 20, 'prediction': 18, 'classification': 17, 'recognition': 16, 'automatic': 18, 'computational': 15, 'iterative': 14, 'convergence': 13, 'metric': 12, 'evaluation': 14, 'performance': 15, 'implementation': 13, 'architecture': 16, 'transformer': 17, 'bias': 11, 'robustness': 12, 'interpretability': 10, 'training': 18, 'validation': 15, 'test': 14, 'inference': 13, 'corpus': 16, 'semantic': 14, 'syntactic': 13, 'contextual': 15, 'vector': 12, 'embedding': 14, 'latent': 11, 'probability': 13, 'distribution': 12, 'normalization': 11, 'regularization': 10, 'gradient': 13, 'backpropagation': 12, 'hyperparameters': 11, 'deep_learning': 24, 'natural_language_processing': 26, 'computer_vision': 23, 'machine_learning': 25, 'large_language_model': 27, 'prompt_engineering': 22, 'zero-shot': 21, 'few-shot': 20, 'fine-tuning': 19, 'reinforcement_learning': 23, 'generative_adversarial_network': 24, 'perplexity': 15, 'tokenization': 14, 'embeddings': 16, 'pretrained': 17 };
+      const DictionnaireInFormelEN = { 'actually': -49, 'am': -42, 'as': 37, 'because': -55, 'but': -43, 'ever': 21, 'everything': -44, 'good': 31, 'has': -33, 'him': -73, 'if': 25, 'in': 10, 'is': 19, 'like': -43, 'more': -41, 'now': 33, 'out': -39, 'since': -25, 'so': -64, 'some': 58, 'something': 26, 'the': 17, 'this': 44, 'too': -38, 'well': 15 };
+      const DictionnaireFormelEN = { 'a': 6, 'above': 4, 'and': -4, 'are': 28, 'around': 42, 'as': 23, 'at': 6, 'be': -17, 'below': 8, 'her': -9, 'hers': -3, 'if': -47, 'is': 8, 'it': 6, 'many': 6, 'me': -4, 'more': 34, 'myself': -4, 'not': -27, 'said': 5, 'she': -6, 'should': -7, 'the': 7, 'these': 8, 'to': 2, 'was': -1, 'we': -8, 'what': 35, 'when': -17, 'where': -18, 'who': 19, 'with': -52, 'your': -17 };
+      const DictionnaireInFormelFR = { 'en_fait': -5, 'suis': -2, 'comme': 3, 'parce_que': -4, 'mais': -3, 'jamais': 2, 'tout': -2, 'bon': 5, 'a': -1, 'lui': 50, 'si': 4, 'dans': 2, 'est': 1, 'genre': -7, 'plus': 3, 'maintenant': 2, 'dehors': 3, 'depuis': -2, 'tellement': -5, 'quelques': 4, 'quelque_chose': 1, 'le': 3, 'ceci': 2, 'trop': 0, 'bien': 4, 'hein': 4, 'tu': -2, 'ouais': 3, 'putain': -12, 'mec': 25, 'nana': -20, 'sérieux': 3, 'grave': 2, 'chouette': -4, 'super': -3, 'cool': 1, 'nan': -2, 'tu_vois': -4, 'en_mode': -6, 'franchement': -2, 'quoi': 0 };
+      const DictionnaireFormelFR = { 'un': 4, 'une': -4, 'au_dessus': 4, 'et': -3, 'sont': 6, 'autour': 5, 'comme': 3, 'à': 2, 'être': -4, 'sous': 3, 'il': 65, 'elle': -65, 'son': 12, 'sa': -12, 'ses': 0, 'si': -6, 'est': 2, 'plusieurs': 3, 'moi': -2, 'davantage': 4, 'moi_même': -1, 'ne': -2, 'pas': -3, 'dit': 2, 'devrait': -2, 'le': 5, 'la': -5, 'les': 0, 'pour': 1, 'était': 2, 'nous': -4, 'quoi': 5, 'quand': -3, 'où': -2, 'qui': 4, 'avec': -6, 'votre': -1, 'leur': 0, 'celui': 10, 'celle': -10, 'ceux': 5, 'celles': -5, 'monsieur': 30, 'madame': -30, 'mademoiselle': -25, 'il_a': 15, 'elle_a': -15, 'été': 2, 'faite': -3, 'fait': 3, 'disait': 1, 'ajoutait': 1, 'soulignait': 1, 'notait': 1, 'observait': -1, 'expliquait': -1, 'pensait': -1, 'trouvait': -1 };
+      const AdjectifsFemininsFR = { 'belle': -15, 'jolie': -12, 'élégante': -10, 'douce': -8, 'charmante': -9, 'passionnée': -7, 'sensible': -6, 'attentive': -7, 'émotive': -6, 'compréhensive': -5, 'sincère': -4, 'ouverte': -5, 'curieuse': -4, 'créative': -5, 'intuitive': -4, 'délicate': -6, 'ravissante': -11, 'lumineuse': -7, 'fraîche': -6, 'vive': -5, 'forte': -3, 'intelligente': -4, 'ambitieuse': -3 };
+      const AdjectifsMasculinsFR = { 'beau': 15, 'joli': 12, 'élégant': 10, 'doux': 8, 'charmant': 9, 'passionné': 7, 'sensible': 6, 'attentif': 7, 'émotif': 6, 'compréhensif': 5, 'sincère': 4, 'ouvert': 5, 'curieux': 4, 'créatif': 5, 'intuitif': 4, 'délicat': 6, 'ravissant': 11, 'lumineux': 7, 'frais': 6, 'vif': 5, 'fort': 3, 'intelligent': 4, 'ambitieux': 3 };
+      const DictionnaireAIFR = { 'données': 25, 'système': 25, 'modèle': 23, 'algorithme': 24, 'apprentissage': 22, 'générer': 28, 'traitement': 20, 'analyse': 18, 'synthèse': 19, 'réseau': 21, 'neuronal': 22, 'optimisation': 17, 'paramètres': 16, 'fonction': 12, 'intelligence': 20, 'artificielle': 21, 'prédiction': 19, 'classification': 18, 'reconnaissance': 17, 'automatique': 19, 'computationnel': 16, 'itératif': 15, 'convergence': 14, 'métrique': 13, 'évaluation': 15, 'performance': 16, 'implémentation': 14, 'architecture': 17, 'transformer': 18, 'biais': 12, 'robustesse': 13, 'interprétabilité': 11, 'entraînement': 19, 'validation': 16, 'test': 15, 'inférence': 14, 'corpus': 17, 'sémantique': 15, 'syntaxique': 14, 'contextuel': 16, 'vectoriel': 13, 'embedding': 15, 'latent': 12, 'probabilité': 14, 'distribution': 13, 'normalisation': 12, 'régularisation': 11, 'gradient': 14, 'rétropropagation': 13, 'hyperparamètres': 12, 'apprentissage_profond': 25, 'traitement_du_langage_naturel': 27, 'vision_par_ordinateur': 24 };
+      const FormalMA_Expanded = { 'سيد': 25, 'سيدة': -25, 'حضرة': 18, 'حضرة_السيد': 28, 'حضرة_السيدة': -28, 'هو': 60, 'هي': -60, 'الذي': 12, 'التي': -12, 'معالي': 20, 'معالي_السيد': 30, 'معالي_السيدة': -30, 'سعادتكم': 22, 'سعادتكم': -22, 'جانبكم': 15, 'جانبكم': -15, 'المحترم': 14, 'المحترمة': -14, 'الأستاذ': 23, 'الأستاذة': -23, 'الدكتور': 24, 'الدكتورة': -24, 'المهندس': 21, 'المهندسة': -21, 'الفاضل': 16, 'الفاضلة': -16, 'صاحب_السعادة': 26, 'صاحبة_السعادة': -26, 'رئيس': 20, 'رئيسة': -20, 'مدير': 19, 'مديرة': -19, 'عضو': 17, 'عضوة': -17, 'مستشار': 18, 'مستشارة': -18, 'نائب': 19, 'نائبة': -19, 'ولي_العهد': 35, 'صاحبة_السمو': -35, 'الأمير': 32, 'الأميرة': -32, 'جلالة_الملك': 40, 'جلالة_الملكة': -40, 'سمو_الأمير': 33, 'سمو_الأميرة': -33, 'سفير': 20, 'سفيرة': -20, 'قنصل': 19, 'قنصلة': -19, 'مبعوث': 18, 'مبعوثة': -18, 'ناطق_رسمي': 21, 'ناطقة_رسمية': -21, 'متحدث': 20, 'متحدثة': -20 };
+      const InformalMA_Expanded = { 'أنا': 0, 'أنتَ': 12, 'أنتِ': -12, 'كيف_حالك': 0, 'بخير': 0, 'صاحبي': 18, 'صاحبتي': -18, 'الدراري': 10, 'البنات': -10, 'أخويا': 16, 'أختي': -16, 'ولد': 14, 'بنت': -14, 'راجل': 20, 'مرا': -20, 'عمي': 10, 'خالتي': -10, 'ولدي': 12, 'بنتي': -12, 'ياك': 0, 'آه': 0, 'واخا': 0, 'صافي': 0, 'بالزربة': 0, 'شويا': 0, 'دابا': 0, 'غدا': 0, 'اليوم': 0, 'علاش': 0, 'كيفاش': 0, 'شكون': 0, 'فين': 0, 'بشحال': 0, 'مالك': 0, 'مالكي': 0, 'عافاك': -5, 'عافاك': -5, 'الله_يخليك': -7, 'الله_يخليك': -7, 'سمح_ليا': -3, 'سمحي_ليا': -3, 'راك_عارف': 8, 'راك_عارفة': -8, 'يا_صاحبي': 16, 'يا_صاحبتي': -16, 'شوف': 5, 'شوفي': -5, 'قول': 4, 'قولي': -4, 'اجي': 3, 'اجي': -3 };
+      const AdjectivesMA_Expanded = { 'زْوين': 12, 'زْوينة': -12, 'كبير': 15, 'كبيرة': -15, 'صغير': 9, 'صغيرة': -9, 'قوي': 14, 'قوية': -14, 'جديد': 11, 'جديدة': -11, 'طويل': 10, 'طويلة': -10, 'قصير': 7, 'قصيرة': -7, 'عريض': 8, 'عريضة': -8, 'رقيق': 6, 'رقيقة': -6, 'ثقيل': 7, 'ثقيلة': -7, 'خفيف': 5, 'خفيفة': -5, 'حلو': 10, 'حلوة': -10, 'مر': 0, 'مرة': 0, 'بارد': 6, 'باردة': -6, 'سخون': 6, 'سخونة': -6, 'مزيان': 8, 'مزيانة': -8, 'خايب': -5, 'خايبة': -5, 'فرحان': 7, 'فرحانة': -7, 'زعلان': -6, 'زعلانة': -6, 'نعسان': 4, 'نعسانة': -4, 'شبعان': 5, 'شبعانة': -5, 'عطشان': 4, 'عطشانة': -4, 'مريض': -3, 'مريضة': -3, 'صحيح': 7, 'صحيحة': -7, 'ذكي': 9, 'ذكية': -9, 'غبي': -6, 'غبية': -6, 'نشيط': 8, 'نشيطة': -8, 'كسول': -7, 'كسولة': -7, 'جاد': 7, 'جادة': -7, 'مهم': 0, 'مهمة': 0 };
+      const FormalHE_Expanded = { 'אדון': 25, 'גברת': -25, 'מר': 23, 'גב׳': -23, 'הוא': 65, 'היא': -65, 'אשר': 12, 'אשר': -8, 'זו': -15, 'זה': 15, 'הנכבד': 20, 'הנכבדה': -20, 'כבוד_ה': 22, 'כבוד_הגברת': -22, 'אדוני': 28, 'גברתי': -28, 'היושב_ראש': 24, 'יושבת_הראש': -24, 'מנהל': 23, 'מנהלת': -23, 'פרופסור': 26, 'פרופסורית': -26, 'דוקטור': 25, 'דוקטורית': -25, 'עורך_דין': 24, 'עורכת_דין': -24, 'מהנדס': 23, 'מהנדסת': -23, 'חבר_כנסת': 27, 'חברת_כנסת': -27, 'שר': 28, 'שרה': -28, 'נשיא': 30, 'נשיאה': -30, 'ראש_הממשלה': 32, 'ראשת_הממשלה': -32, 'שגריר': 24, 'שגרירה': -24, 'קונסול': 23, 'קונסולית': -23, 'דובר': 22, 'דוברת': -22, 'מזכיר': 21, 'מזכירה': -21, 'יועץ': 20, 'יועצת': -20, 'נציג': 19, 'נציגה': -19, 'מרצה': 18, 'מרצה': -18, 'סטודנט': 17, 'סטודנטית': -17, 'עובד': 16, 'עובדת': -16 };
+      const InformalHE_Expanded = { 'אני': 0, 'אתה': 15, 'את': -15, 'מה_שלומך': 5, 'מה_שלומךְ': -5, 'בסדר': 0, 'חבר_שלי': 20, 'חברה_שלי': -20, 'בנים': 12, 'בנות': -12, 'אחי': 18, 'אחותי': -18, 'ילד': 16, 'ילדה': -16, 'גבר': 22, 'אישה': -22, 'אבא': 10, 'אמא': -10, 'סבא': 8, 'סבתא': -8, 'בן': 14, 'בת': -14, 'בחור': 18, 'בחורה': -18, 'מה_קורה': 0, 'הכל_טוב': 0, 'בכיף': 0, 'יאללה': 0, 'נו': 0, 'טוב': 0, 'בטח': 0, 'אולי': 0, 'כאילו': 0, 'בקיצור': 0, 'תראה': 7, 'תראי': -7, 'שמע': 6, 'שמעי': -6, 'לך': 4, 'לכי': -4, 'בוא': 5, 'בואי': -5, 'תגיד': 6, 'תגידי': -6, 'מה_אתה_אומר': 8, 'מה_את_אומרת': -8, 'אין_בעיה': 0, 'בסבבה': 0, 'חבל_על_הזמן': 0, 'יא_חביבי': 10, 'יא_חביבתי': -10, 'נשמה_שלי': -5, 'חיים_שלי': 5 };
+      const AdjectivesHE_Expanded = { 'יפה': 12, 'יפה': -15, 'גדול': 16, 'גדולה': -16, 'קטן': 10, 'קטנה': -10, 'חזק': 15, 'חזקה': -15, 'חדש': 13, 'חדשה': -13, 'גבוה': 12, 'גבוהה': -12, 'חכם': 11, 'חכמה': -11, 'טוב': 9, 'טובה': -9, 'רע': -3, 'רעה': 3, 'עייף': -6, 'עייפה': -6, 'שמח': 8, 'שמחה': -8, 'עצוב': -7, 'עצובה': -7, 'חכם': 11, 'חכמה': -11, 'טיפש': -5, 'טיפשה': -5, 'עשיר': 7, 'עשירה': -7, 'עני': -4, 'ענייה': -4, 'בריא': 9, 'בריאה': -9, 'חולה': -6, 'חולה': -6, 'צעיר': 10, 'צעירה': -10, 'זקן': -8, 'זקנה': -8, 'חרוץ': 8, 'חרוצה': -8, 'עצלן': -7, 'עצלנית': -7, 'נחמד': 9, 'נחמדה': -9, 'חשוב': 0, 'חשובה': 0 };
+      const FormalES_Expanded = { 'Señor': 28, 'Señora': -28, 'Estimado': 20, 'Estimada': -20, 'Él': 65, 'Ella': -65, 'El': 12, 'La': -12, 'Usted': 10, 'Excelentísimo_Señor': 35, 'Excelentísima_Señora': -35, 'Ilustrísimo_Señor': 30, 'Ilustrísima_Señora': -30, 'Don': 25, 'Doña': -25, 'Caballero': 22, 'Dama': -22, 'Su_Señoría': 20, 'Su_Señoría': -20, 'Excelencia': 28, 'Excelencia': -28, 'Presidente': 20, 'Presidenta': -20, 'Director': 19, 'Directora': -19, 'Profesor': 21, 'Profesora': -21, 'Doctor': 22, 'Doctora': -22, 'Ingeniero': 20, 'Ingeniera': -20, 'Abogado': 19, 'Abogada': -19, 'Diputado': 18, 'Diputada': -18, 'Senador': 19, 'Senadora': -19, 'Embajador': 20, 'Embajadora': -20, 'Cónsul': 18, 'Cónsul': -18, 'Portavoz': 17, 'Portavoz': -17, 'Representante': 16, 'Representante': -16, 'Miembro': 15, 'Miembro': -15, 'Jefe': 18, 'Jefa': -18, 'Secretario': 17, 'Secretaria': -17, 'Ministro': 21, 'Ministra': -21 };
+      const InformalES_Expanded = { 'Yo': 0, 'Tú': 0, '¿Qué_tal?': 0, 'Bien': 0, 'Amigo': 20, 'Amiga': -20, 'Chico': 16, 'Chica': -16, 'Hermano': 18, 'Hermana': -18, 'Tío': 12, 'Tía': -12, 'Primo': 11, 'Prima': -11, 'Abuelo': 10, 'Abuela': -10, 'Novio': 15, 'Novia': -15, 'Esposo': 17, 'Esposa': -17, 'Hombre': 22, 'Mujer': -22, 'Chaval': 14, 'Chavala': -14, 'Colega': 0, 'Compañero': 13, 'Compañera': -13, 'Nene': 11, 'Nena': -11, 'Vato': 15, 'Vata': -15, 'Güey': 10, 'Güey': -10, 'Tío/a': 8, 'Mano': 14, 'Mana': -14, 'Pana': 0, '¿Qué_onda?': 0, 'Bien_¿y_tú?': 0, 'Vale': 0, 'Oye': 0, 'Mira': 6, 'Mira': -6, 'Dime': 0, 'Bueno': 0, 'Claro': 0, 'Hombre...': 8, 'Mujer...': -8, 'Chico/a...': 5 };
+      const AdjectivesES_Expanded = { 'bonito': 15, 'bonita': -15, 'guapo': 16, 'guapa': -16, 'grande': 0, 'pequeño': 10, 'pequeña': -10, 'fuerte': 0, 'inteligente': 0, 'nuevo': 12, 'nueva': -12, 'alto': 11, 'alta': -11, 'bajo': 9, 'baja': -9, 'gordo': 8, 'gorda': -8, 'flaco': 7, 'flaca': -7, 'joven': 0, 'viejo': 6, 'vieja': -6, 'listo': 9, 'lista': -9, 'tonto': -7, 'tonta': -7, 'feliz': 0, 'triste': 0, 'amable': 0, 'simpático': 8, 'simpática': -8, 'antipático': -7, 'antipática': -7, 'interesante': 0, 'aburrido': -5, 'aburrida': -5, 'fácil': 0, 'difícil': 0, 'rápido': 7, 'rápida': -7, 'lento': -6, 'lenta': -6, 'trabajador': 8, 'trabajadora': -8, 'perezoso': -7, 'perezosa': -7, 'serio': 6, 'seria': -6, 'divertido': 7, 'divertida': -7, 'callado': -5, 'callada': -5, 'hablador': 6, 'habladora': -6, 'bueno': 9, 'buena': -9, 'malo': -8, 'mala': -8, 'claro': 0, 'oscuro': 0, 'frío': 0, 'caliente': 0 };
+      const FormalDE_Expanded = { 'Herr': 30, 'Frau': -30, 'Sehr_geehrter_Herr': 25, 'Sehr_geehrte_Frau': -25, 'Er': 70, 'Sie': -70, 'Der': 15, 'Die': -15, 'Das': 0, 'Sie': -10, 'Ihre_Hoheit': -35, 'Seine_Hoheit': 35, 'Exzellenz': -32, 'Exzellenz': 32, 'Präsident': 22, 'Präsidentin': -22, 'Direktor': 21, 'Direktorin': -21, 'Professor': 24, 'Professorin': -24, 'Doktor': 23, 'Doktorin': -23, 'Ingenieur': 22, 'Ingenieurin': -22, 'Anwalt': 21, 'Anwältin': -21, 'Abgeordneter': 20, 'Abgeordnete': -20, 'Senator': 21, 'Senatorin': -21, 'Botschafter': 22, 'Botschafterin': -22, 'Konsul': 20, 'Konsulin': -20, 'Sprecher': 19, 'Sprecherin': -19, 'Sekretär': 18, 'Sekretärin': -18, 'Berater': 19, 'Beraterin': -19, 'Vertreter': 18, 'Vertreterin': -18, 'Dozent': 17, 'Dozentin': -17, 'Student': 16, 'Studentin': -16, 'Mitarbeiter': 15, 'Mitarbeiterin': -15, 'Chef': 20, 'Chefin': -20, 'Minister': 23, 'Ministerin': -23 };
+      const InformalDE_Expanded = { 'Ich': 0, 'Du': 0, 'Wie_geht_es_dir?': 0, 'Gut': 0, 'Freund': 20, 'Freundin': -20, 'Junge': 15, 'Mädchen': -15, 'Bruder': 18, 'Schwester': -18, 'Papa': 12, 'Mama': -12, 'Opa': 10, 'Oma': -10, 'Sohn': 14, 'Tochter': -14, 'Kerl': 16, 'Tussi': -16, 'Kumpel': 14, 'Freund': 18, 'Freundin': -18, 'Na?': 0, 'Hallo': 0, 'Tschüss': 0, 'Ja': 0, 'Nein': 0, 'Okay': 0, 'Klar': 0, 'Super': 0, 'Cool': 0, 'Echt?': 0, 'Guck_mal': 8, 'Guck_mal': -8, 'Hör_mal': 7, 'Hör_mal': -7, 'Geh': 5, 'Geh': -5, 'Komm': 6, 'Komm': -6, 'Sag_mal': 7, 'Sag_mal': -7, 'Was_geht?': 0, 'Alles_klar?': 0, 'Kein_Problem': 0, 'Liebling': 0, 'Schatz': 0, 'Alter': 10, 'Alte': -10, 'Mann': 22, 'Frau': -22 };
+      const AdjectivesDE_Expanded = { 'schön': -15, 'hübsch': -14, 'gutaussehend': 16, 'groß': 0, 'klein': 0, 'stark': 0, 'intelligent': 0, 'neu': 0, 'alt': 0, 'hoch': 0, 'nett': 0, 'freundlich': 8, 'freundlich': -8, 'unfreundlich': -7, 'unfreundlich': 7, 'interessant': 0, 'langweilig': -6, 'langweilig': 6, 'einfach': 0, 'schwierig': 0, 'schnell': 0, 'langsam': 0, 'fleißig': 9, 'fleißig': -9, 'faul': -8, 'faul': 8, 'ernst': 7, 'ernst': -7, 'lustig': 8, 'lustig': -8, 'ruhig': -6, 'ruhig': 6, 'gesprächig': 7, 'gesprächig': -7, 'gut': 0, 'schlecht': 0, 'hell': 0, 'dunkel': 0, 'kalt': 0, 'warm': 0, 'jung': 10, 'jung': -10, 'alt': -9, 'alt': 9, 'dick': -5, 'dick': -5, 'dünn': 5, 'dünn': 5, 'gesund': 0, 'krank': -6, 'krank': 6, 'wichtig': 0, 'unwichtig': 0, 'richtig': 0, 'falsch': 0 };
+      const FormalTR_Expanded = { 'Beyefendi': 30, 'Hanımefendi': -30, 'Sayın': 20, 'O': 10, 'Kendisi': 0, 'Değerli': 15, 'Kıymetli': 14, 'Muhterem': 16, 'Saygıdeğer': 17, 'Başkan': 22, 'Başkan': -22, 'Müdür': 21, 'Müdür': -21, 'Profesör': 24, 'Profesör': -24, 'Doktor': 23, 'Doktor': -23, 'Mühendis': 22, 'Mühendis': -22, 'Avukat': 21, 'Avukat': -21, 'Vekil': 20, 'Vekil': -20, 'Senatör': 21, 'Senatör': -21, 'Büyükelçi': 22, 'Büyükelçi': -22, 'Konsolos': 20, 'Konsolos': -20, 'Sözcü': 19, 'Sözcü': -19, 'Sekreter': 18, 'Sekreter': -18, 'Danışman': 19, 'Danışman': -19, 'Temsilci': 18, 'Temsilci': -18, 'Öğretim_Üyesi': 17, 'Öğretim_Üyesi': -17, 'Öğrenci': 16, 'Öğrenci': -16, 'Çalışan': 15, 'Çalışan': -15, 'Şef': 20, 'Şef': -20, 'Bakan': 23, 'Bakan': -23, 'Vali': 21, 'Vali': -21, 'Kaymakam': 20, 'Kaymakam': -20, 'Belediye_Başkanı': 22, 'Belediye_Başkanı': -22 };
+      const InformalTR_Expanded = { 'Ben': 0, 'Sen': 0, 'Nasılsın?': 0, 'İyi': 0, 'Abi': 22, 'Abla': -22, 'Arkadaşlar': 0, 'Kızlar': -15, 'Erkekler': 15, 'Kanka': 0, 'Dostum': 18, 'Dostum': -18, 'Çocuklar': 0, 'Oğlan': 16, 'Kız': -16, 'Adam': 25, 'Kadın': -25, 'Baba': 10, 'Anne': -10, 'Dede': 8, 'Nine': -8, 'Oğul': 14, 'Kız_Evlat': -14, 'Bakar_mısın?': 0, 'Selam': 0, 'Merhaba': 0, 'Güle_güle': 0, 'Evet': 0, 'Hayır': 0, 'Tamam': 0, 'Peki': 0, 'Harika': 0, 'Süper': 0, 'Ya?': 0, 'Hadi': 0, 'Bak': 7, 'Bak': -7, 'Dinle': 6, 'Dinle': -6, 'Git': 5, 'Git': -5, 'Gel': 6, 'Gel': -6, 'Söyle': 7, 'Söyle': -7, 'Ne_haber?': 0, 'İyi_misin?': 0, 'Sorun_değil': 0, 'Canım': 0, 'Hayatım': 0, 'Koçum': 12, 'Aslanım': 13, 'Gülüm': -12, 'Çiçeğim': -13 };
+      const AdjectivesTR_Expanded = { 'yakışıklı': 15, 'güzel': -15, 'büyük': 0, 'küçük': 0, 'güçlü': 0, 'zeki': 0, 'iyi': 0, 'kötü': 0, 'uzun': 0, 'kısa': 0, 'genç': 0, 'yaşlı': 0, 'mutlu': 0, 'üzgün': 0, 'neşeli': 0, 'sinirli': 0, 'ilgili': 0, 'ilgisiz': 0, 'çalışkan': 0, 'tembel': 0, 'ciddi': 0, 'komik': 0, 'sessiz': 0, 'konuşkan': 0, 'akıllı': 0, 'aptal': 0, 'zengin': 0, 'fakir': 0, 'sağlıklı': 0, 'hasta': 0, 'yeni': 0, 'eski': 0, 'önemli': 0, 'önemsiz': 0, 'doğru': 0, 'yanlış': 0, 'kolay': 0, 'zor': 0, 'hızlı': 0, 'yavaş': 0, 'dürüst': 0, 'yalancı': 0, 'cesur': 0, 'korkak': 0, 'nazik': 0, 'kaba': 0, 'sıcak': 0, 'soğuk': 0, 'aç': 0, 'tok': 0, 'susuz': 0, 'yorgun': 0, 'dinç': 0, 'kalın': 0, 'ince': 0, 'parlak': 0, 'mat': 0, 'yumuşak': 0, 'sert': 0, 'tatlı': 0, 'acı': 0, 'ekşi': 0, 'tuzlu': 0, 'temiz': 0, 'kirli': 0, 'karanlık': 0, 'aydınlık': 0, 'pahalı': 0, 'ucuz': 0, 'ağır': 0, 'hafif': 0 };
+      const FormalPT_Expanded = { 'Senhor': 30, 'Senhora': -30, 'Estimado_Senhor': 25, 'Estimada_Senhora': -25, 'Ele': 70, 'Ela': -70, 'O': 15, 'A': -15, 'Você': -5, 'Excelentíssimo_Senhor': 35, 'Excelentíssima_Senhora': -35, 'Ilustríssimo_Senhor': 32, 'Ilustríssima_Senhora': -32, 'Dom': 28, 'Dona': -28, 'Cavalheiro': 22, 'Dama': -22, 'Sua_Senhoria': 20, 'Sua_Senhoria': -20, 'Excelência': 30, 'Excelência': -30, 'Presidente': 22, 'Presidenta': -22, 'Diretor': 21, 'Diretora': -21, 'Professor': 23, 'Professora': -23, 'Doutor': 22, 'Doutora': -22, 'Engenheiro': 21, 'Engenheira': -21, 'Advogado': 20, 'Advogada': -20, 'Deputado': 19, 'Deputada': -19, 'Senador': 20, 'Senadora': -20, 'Embaixador': 21, 'Embaixadora': -21, 'Cônsul': 19, 'Cônsul': -19, 'Porta-voz': 18, 'Porta-voz': -18, 'Representante': 17, 'Representante': -17, 'Membro': 16, 'Membro': -16, 'Chefe': 19, 'Chefe': -19, 'Secretário': 18, 'Secretária': -18, 'Ministro': 22, 'Ministra': -22 };
+      const InformalPT_Expanded = { 'Eu': 0, 'Tu': 0, 'Como_estás?': 0, 'Bem': 0, 'Amigo': 20, 'Amiga': -20, 'Rapaz': 16, 'Rapariga': -16, 'Irmão': 18, 'Irmã': -18, 'Tio': 12, 'Tia': -12, 'Primo': 11, 'Prima': -11, 'Avô': 10, 'Avó': -10, 'Namorado': 15, 'Namorada': -15, 'Marido': 17, 'Esposa': -17, 'Homem': 22, 'Mulher': -22, 'Miúdo': 14, 'Miúda': -14, 'Colega': 0, 'Companheiro': 13, 'Companheira': -13, 'Gajo': 15, 'Gaja': -15, 'Mano': 14, 'Mana': -14, 'Tipo': 12, 'Tipa': -12, 'Bicho': 0, 'Bicha': 0, 'Querido': 0, 'Querida': 0, 'Olá': 0, 'Tchau': 0, 'Sim': 0, 'Não': 0, 'Ok': 0, 'Claro': 0, 'Super': 0, 'Legal': 0, 'Olha': 6, 'Olha': -6, 'Diz_aí': 0, 'Bom': 0, 'Claro': 0, 'Cara': 10, 'Mina': -10, 'Pessoal': 0 };
+      const AdjectivesPT_Expanded = { 'bonito': 15, 'bonita': -15, 'lindo': 16, 'linda': -16, 'grande': 0, 'pequeno': 10, 'pequena': -10, 'forte': 0, 'inteligente': 0, 'novo': 12, 'nova': -12, 'alto': 11, 'alta': -11, 'baixo': 9, 'baixa': -9, 'gordo': 8, 'gorda': -8, 'magro': 7, 'magra': -7, 'jovem': 0, 'velho': 6, 'velha': -6, 'esperto': 9, 'esperta': -9, 'burro': -7, 'burra': -7, 'feliz': 0, 'triste': 0, 'amável': 0, 'simpático': 8, 'simpática': -8, 'antipático': -7, 'antipática': -7, 'interessante': 0, 'chato': -5, 'chata': -5, 'fácil': 0, 'difícil': 0, 'rápido': 7, 'rápida': -7, 'lento': -6, 'lenta': -6, 'trabalhador': 8, 'trabalhadora': -8, 'preguiçoso': -7, 'preguiçosa': -7, 'sério': 6, 'séria': -6, 'divertido': 7, 'divertida': -7, 'calado': -5, 'calada': -5, 'falador': 6, 'faladora': -6, 'bom': 9, 'boa': -9, 'mau': -8, 'má': -8, 'claro': 0, 'escuro': 0, 'frio': 0, 'quente': 0 };
+      const FormalHI_Expanded = {'श्रीमान': 30, 'श्रीमती': -30, 'महोदय': 25, 'महोदया': -25,'वह': 65, 'वह': -65, 'यह': 12, 'यह': -12, 'आप': 10,'अति_सम्मानित_श्रीमान': 35, 'अति_सम्मानित_श्रीमती': -35,'माननीय_श्रीमान': 32, 'माननीय_श्रीमती': -32,'श्री': 28, 'श्रीमती': -28, 'महोदय_श्री': 30, 'महोदया_श्रीमती': -30,'अध्यक्ष': 22, 'अध्यक्षा': -22, 'निदेशक': 21, 'निदेशिका': -21,'प्राध्यापक': 24, 'प्राध्यापिका': -24, 'डॉक्टर': 23, 'डॉक्टरा': -23,'इंजीनियर': 22, 'इंजीनियर': -22, 'वकील': 21, 'वकील': -21,'सांसद': 20, 'सांसद': -20, 'राज्यपाल': 23, 'राज्यपाल': -23,'राजदूत': 22, 'राजदूत': -22, 'महावाणिज्य_दूत': 21, 'महावाणिज्य_दूत': -21,'प्रवक्ता': 19, 'प्रवक्ता': -19, 'सचिव': 18, 'सचिव': -18,'सलाहकार': 19, 'सलाहकार': -19, 'प्रतिनिधि': 18, 'प्रतिनिधि': -18,'प्रोफेसर': 20, 'प्रोफेसर': -20, 'छात्र': 17, 'छात्रा': -17,'कर्मचारी': 16, 'कर्मचारी': -16, 'मंत्री': 24, 'मंत्री': -24,'उपाध्यक्ष': 21, 'उपाध्यक्षा': -21, 'सदस्य': 18, 'सदस्य': -18,'अधिकारी': 19, 'अधिकारी': -19, 'निरीक्षक': 20, 'निरीक्षक': -20,'प्रबंधक': 22, 'प्रबंधक': -22, 'संस्थापक': 23, 'संस्थापक': -23 };
+      const InformalHI_Expanded = {'मैं': 0, 'तू': 0, 'आप_कैसे_हैं': 0, 'ठीक': 0,'दोस्त': 20, 'दोस्त': -20, 'लड़का': 16, 'लड़की': -16,'भाई': 18, 'बहन': -18, 'चाचा': 12, 'चाची': -12,'भतीजा': 11, 'भतीजी': -11, 'दादा': 10, 'दादी': -10,'प्रेमी': 15, 'प्रेमिका': -15, 'पति': 17, 'पत्नी': -17,'आदमी': 22, 'औरत': -22, 'बच्चा': 14, 'बच्ची': -14,'यार': 0, 'साथी': 13, 'साथी': -13, 'भैया': 15, 'दीदी': -15,'क्या_हाल_है': 0, 'हाय': 0, 'नमस्ते': 0, 'अलविदा': 0,'हाँ': 0, 'नहीं': 0, 'अच्छा': 0, 'ठीक_है': 0, 'बढ़िया': 0,'देख': 6, 'देख': -6, 'बता': 0, 'सुन': 7, 'सुन': -7 };
+      const AdjectivesHI_Expanded = {'सुंदर': 15, 'सुंदर': -15, 'बड़ा': 0, 'छोटा': 10, 'छोटी': -10,'मजबूत': 0, 'बुद्धिमान': 0, 'नया': 12, 'नई': -12,'लंबा': 11, 'लंबी': -11, 'नन्हा': 9, 'नन्ही': -9,'मोटा': 8, 'मोटी': -8, 'पतला': 7, 'पतली': -7,'जवान': 0, 'बूढ़ा': 6, 'बूढ़ी': -6, 'चतुर': 9, 'चतुर': -9,'मूर्ख': -7, 'मूर्ख': -7, 'खुश': 0, 'उदास': 0,'दयालु': 0, 'मिलनसार': 8, 'मिलनसार': -8, 'गंभीर': 6, 'गंभीर': -6 };
+      
+      
+      // Set language function
+      function setLanguage(lang) {
+      currentLang = lang;
+      const langData = uiTexts[currentLang];
+      document.getElementById('title').textContent = langData.title;
+      document.getElementById('instructions').textContent = langData.instructions;
+      document.getElementById('analyze-btn').value = langData.analyze;
+      document.getElementById('clear-btn').value = langData.clear;
+      document.getElementById('about-btn').value = langData.about;
+      document.querySelector('.dropdown-btn').innerHTML = `<span id="flag" class="flag">${flags[currentLang]}</span> ${currentLang === 'en' ? 'English' : currentLang === 'fr' ? 'Français' : currentLang === 'ma' ? 'العربية' : currentLang === 'he' ? 'עברית' : currentLang === 'es' ? 'Español' : currentLang === 'de' ? 'Deutsch' : currentLang === 'tr' ? 'Türkçe' : currentLang === 'pt' ? 'Português' : 'हिन्दी'}`;
+      updateWordCount(document.forms['Counter'].Text);
       }
-      GenderWords(document.forms['Counter']);
-    }
-
-    function updateWordCount(textarea) {
-      const text = textarea.value;
-      const words = text.split(/[^a-zA-Z]+/).filter(w => w.length > 0);
-      document.getElementById('word-count').textContent = `${words.length} ${currentLang === 'en' ? 'words' : 'mots'}`;
-    }
-
-    function GenderWords(Form) {
-      var Word;
-      var MaleInFormel = 0;
-      var MaleFormel = 0;
-      var FemaleInFormel = 0;
-      var FemaleFormel = 0;
-      var AIScore = 0;
-      var i;
-
-      var TextIn = Form.Text;
-      var resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = "";
-
-      const DictionnaireInFormel = currentLang === 'en' ? DictionnaireInFormelEN : DictionnaireInFormelFR;
-      const DictionnaireFormel = currentLang === 'en' ? DictionnaireFormelEN : DictionnaireFormelFR;
-      const DictionnaireAI = currentLang === 'en' ? DictionnaireAIEN : DictionnaireAIFR;
-      const AdjectifsFeminins = currentLang === 'fr' ? AdjectifsFemininsFR : {};
-      const AdjectifsMasculins = currentLang === 'fr' ? AdjectifsMasculinsFR : {};
-
-      Word = TextIn.value.toLowerCase();
-      var TextArray = Word.split(/[^a-zA-Z]+/);
-      if (TextArray[TextArray.length - 1] == "") { TextArray.length--; }
-      var wordCount = TextArray.length;
-      resultsDiv.innerHTML += `<h2>${currentLang === 'en' ? 'Analysis Summary' : 'Résumé de l\'analyse'}</h2>`;
-      resultsDiv.innerHTML += `${currentLang === 'en' ? 'Total words' : 'Nombre total de mots'}: ${wordCount}\n`;
-      if (wordCount < 300) {
-        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Too few words. Try 300 words or more.' : 'Trop peu de mots. Essayez 300 mots ou plus.'}\n`;
+      
+      // Update word count
+      function updateWordCount(textarea) {
+        const text = textarea.value.trim();
+        const wordCount = text ? text.split(/\s+/).length : 0;
+        document.getElementById('word-count').textContent = `${wordCount} ${uiTexts[currentLang].words}`;
       }
-
-      var wordFreq = {};
-      for (i = 0; i < TextArray.length; i++) {
-        Word = TextArray[i];
-        wordFreq[Word] = (wordFreq[Word] || 0) + 1;
-
-        if (!isNaN(DictionnaireInFormel[Word])) {
-          if (DictionnaireInFormel[Word] > 0) MaleInFormel += DictionnaireInFormel[Word];
-          if (DictionnaireInFormel[Word] < 0) FemaleInFormel -= DictionnaireInFormel[Word];
-        }
-        if (!isNaN(DictionnaireFormel[Word])) {
-          if (DictionnaireFormel[Word] > 0) MaleFormel += DictionnaireFormel[Word];
-          if (DictionnaireFormel[Word] < 0) FemaleFormel -= DictionnaireFormel[Word];
-        }
-        if (!isNaN(DictionnaireAI[Word])) {
-          AIScore += DictionnaireAI[Word];
-        }
-        if (currentLang === 'fr') {
-          if (!isNaN(AdjectifsFeminins[Word])) {
-            FemaleInFormel -= AdjectifsFeminins[Word];
-            FemaleFormel -= AdjectifsFeminins[Word];
-          }
-          if (!isNaN(AdjectifsMasculins[Word])) {
-            MaleInFormel += AdjectifsMasculins[Word];
-            MaleFormel += AdjectifsMasculins[Word];
-          }
-        }
+      
+      // Clear form
+      function ClearForm(form) {
+        form.Text.value = '';
+        document.getElementById('results').innerHTML = '';
+        updateWordCount(form.Text);
       }
-
-      var personalPronouns = (TextIn.value.match(/\b(i|me|my|mine|we|us|our|ours)\b/gi) || []).length / wordCount;
-      var repetitionScore = Object.values(wordFreq).reduce((sum, freq) => sum + (freq > 5 ? freq : 0), 0) / wordCount;
-      var sentences = TextIn.value.split(/[.!?]+/).filter(s => s.trim()).length;
-      var avgSentenceLen = wordCount / sentences || 0;
-      AIScore += (personalPronouns < 0.01 ? 50 : 0);
-      AIScore += (repetitionScore > 0.05 ? 30 : 0);
-      AIScore += (avgSentenceLen > 20 ? 20 : 0);
-
-      var totalScore = MaleInFormel + FemaleInFormel + MaleFormel + FemaleFormel + AIScore || 1;
-      var aiPercent = (AIScore / totalScore * 100).toFixed(1);
-
-      resultsDiv.innerHTML += `\n<h2>${currentLang === 'en' ? 'AI Detection' : 'Détection IA'}</h2>`;
-      resultsDiv.innerHTML += `${currentLang === 'en' ? 'AI Score' : 'Score IA'} = ${AIScore} (${aiPercent}%)\n`;
-      resultsDiv.innerHTML += `${currentLang === 'en' ? 'Verdict' : 'Verdict'}: ${aiPercent > 50 ? (currentLang === 'en' ? 'Likely AI-generated' : 'Probablement généré par IA') : (currentLang === 'en' ? 'Likely human-written' : 'Probablement écrit par un humain')}\n`;
-
-      if (aiPercent <= 50) {
-        var Percent, Weak = 0;
-
-        resultsDiv.innerHTML += `\n<h2>${currentLang === 'en' ? 'Gender Prediction: Informal' : 'Prédiction de genre : Informel'}</h2>`;
-        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Female' : 'Féminin'} = ${FemaleInFormel}\n`;
-        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Male' : 'Masculin'} = ${MaleInFormel}\n`;
-        if (MaleInFormel + FemaleInFormel > 0) {
-          Percent = MaleInFormel * 100.0 / (MaleInFormel + FemaleInFormel);
-        } else { Percent = 0; }
-        Percent = parseInt(Percent * 100) / 100.0;
-        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Difference' : 'Différence'} = ${(MaleInFormel - FemaleInFormel)}; ${Percent}%\n`;
-        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Verdict' : 'Verdict'}: `;
-        if (Percent > 40 && Percent < 60) { Weak++; resultsDiv.innerHTML += currentLang === 'en' ? 'Weak ' : 'Faible '; }
-        if (MaleInFormel > FemaleInFormel) { resultsDiv.innerHTML += currentLang === 'en' ? 'MALE' : 'MASCULIN'; }
-        else if (MaleInFormel < FemaleInFormel) { resultsDiv.innerHTML += currentLang === 'en' ? 'FEMALE' : 'FÉMININ'; }
-        else { resultsDiv.innerHTML += currentLang === 'en' ? 'unknown' : 'inconnu'; }
-        if (Weak > 0) { resultsDiv.innerHTML += `\n${currentLang === 'en' ? 'Weak emphasis could indicate European.' : 'Un faible accent pourrait indiquer un Européen.'}`; }
-
-        Weak = 0;
-        resultsDiv.innerHTML += `\n\n<h2>${currentLang === 'en' ? 'Gender Prediction: Formal' : 'Prédiction de genre : Formel'}</h2>`;
-        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Female' : 'Féminin'} = ${FemaleFormel}\n`;
-        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Male' : 'Masculin'} = ${MaleFormel}\n`;
-        if (MaleFormel + FemaleFormel > 0) {
-          Percent = MaleFormel * 100.0 / (MaleFormel + FemaleFormel);
-        } else { Percent = 0.001; }
-        Percent = parseInt(Percent * 100) / 100.0;
-        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Difference' : 'Différence'} = ${(MaleFormel - FemaleFormel)}; ${Percent}%\n`;
-        resultsDiv.innerHTML += `${currentLang === 'en' ? 'Verdict' : 'Verdict'}: `;
-        if (Percent > 40 && Percent < 60) { Weak++; resultsDiv.innerHTML += currentLang === 'en' ? 'Weak ' : 'Faible '; }
-        if (MaleFormel > FemaleFormel) { resultsDiv.innerHTML += currentLang === 'en' ? 'MALE' : 'MASCULIN'; }
-        else if (MaleFormel < FemaleFormel) { resultsDiv.innerHTML += currentLang === 'en' ? 'FEMALE' : 'FÉMININ'; }
-        else { resultsDiv.innerHTML += currentLang === 'en' ? 'unknown' : 'inconnu'; }
-        if (Weak > 0) { resultsDiv.innerHTML += `\n${currentLang === 'en' ? 'Weak emphasis could indicate European.' : 'Un faible accent pourrait indiquer un Européen.'}`; }
-      } else {
-        resultsDiv.innerHTML += `\n<h2>${currentLang === 'en' ? 'Gender Prediction' : 'Prédiction de genre'}</h2>`;
-        resultsDiv.innerHTML += `${currentLang === 'en' ? 'AI detected, skipping gender prediction.' : 'IA détectée, prédiction de genre ignorée.'}\n`;
+      
+      // Show about message
+      function showAbout() {
+        alert(uiTexts[currentLang].aboutMsg);
       }
-    }
-
-    function ClearForm(form) {
-      form.Text.value = "";
-      document.getElementById('word-count').textContent = `0 ${currentLang === 'en' ? 'words' : 'mots'}`;
-      document.getElementById('results').innerHTML = "";
-    }
-  </script>
-</body>
+      
+      // Gender and AI analysis (simplified, replace with full logic)
+      function GenderWords(form) {
+      const text = form.Text.value.toLowerCase().trim();
+      if (!text) {
+      document.getElementById('results').innerHTML = `<h2>${uiTexts[currentLang].analysisSummary}</h2>${uiTexts[currentLang].tooFewWords}`;
+      return;
+      }
+      
+      const words = text.split(/\s+/);
+      let aiScore = 0, informalScore = 0, formalScore = 0;
+      let dictAI, dictInformal, dictFormal;
+      
+      // Dictionary selection (unchanged)
+      if (currentLang === 'en') { dictAI = DictionnaireAIEN; dictInformal = DictionnaireInFormelEN; dictFormal = DictionnaireFormelEN; }
+      else if (currentLang === 'fr') { dictAI = DictionnaireAIFR; dictInformal = DictionnaireInFormelFR; dictFormal = DictionnaireFormelFR; }
+      else if (currentLang === 'ma') { dictAI = DictionnaireAIFR; dictInformal = InformalMA_Expanded; dictFormal = FormalMA_Expanded; }
+      else if (currentLang === 'he') { dictAI = DictionnaireAIEN; dictInformal = InformalHE_Expanded; dictFormal = FormalHE_Expanded; }
+      else if (currentLang === 'es') { dictAI = DictionnaireAIEN; dictInformal = InformalES_Expanded; dictFormal = FormalES_Expanded; }
+      else if (currentLang === 'de') { dictAI = DictionnaireAIEN; dictInformal = InformalDE_Expanded; dictFormal = FormalDE_Expanded; }
+      else if (currentLang === 'tr') { dictAI = DictionnaireAIEN; dictInformal = InformalTR_Expanded; dictFormal = FormalTR_Expanded; }
+      else if (currentLang === 'pt') { dictAI = DictionnaireAIEN; dictInformal = InformalPT_Expanded; dictFormal = FormalPT_Expanded; }
+      else if (currentLang === 'hi') { dictAI = DictionnaireAIEN; dictInformal = InformalHI_Expanded; dictFormal = FormalHI_Expanded; }
+      
+      words.forEach(word => {
+      if (dictAI[word]) aiScore += dictAI[word];
+      if (dictInformal[word]) informalScore += dictInformal[word];
+      if (dictFormal[word]) formalScore += dictFormal[word];
+      });
+      
+      const maxAIScore = 500;
+      const aiPercentage = Math.min(Math.max((aiScore / maxAIScore) * 100, 0), 100).toFixed(1);
+      const aiVerdict = aiScore > 100 ? uiTexts[currentLang].likelyAI : uiTexts[currentLang].likelyHuman;
+      const informalGender = informalScore > 0 ? uiTexts[currentLang].male : informalScore < 0 ? uiTexts[currentLang].female : uiTexts[currentLang].unknown;
+      const formalGender = formalScore > 0 ? uiTexts[currentLang].male : formalScore < 0 ? uiTexts[currentLang].female : uiTexts[currentLang].unknown;
+      const informalStrength = Math.abs(informalScore) > 50 ? '' : ` (${uiTexts[currentLang].weak})`;
+      const formalStrength = Math.abs(formalScore) > 50 ? '' : ` (${uiTexts[currentLang].weak})`;
+      
+      const results = `
+      <h2 class="section-title">${uiTexts[currentLang].aiDetection}</h2>
+      <div class="result-box">
+        <p>${uiTexts[currentLang].aiScore}: <span class="big-number">${aiScore}</span> (${aiPercentage}% ${uiTexts[currentLang].likelyAI})</p>
+        <p>${uiTexts[currentLang].verdict}: ${aiVerdict}</p>
+      </div>
+      <div class="separator"></div>
+      <h2 class="section-title">${uiTexts[currentLang].genderPrediction}</h2>
+      <div class="result-box">
+        <p>${uiTexts[currentLang].genderPredictionInformal}:<br>${informalGender}${informalStrength} (${uiTexts[currentLang].difference}: <span class="big-number">${Math.abs(informalScore)}</span>)</p>
+        <p>${uiTexts[currentLang].genderPredictionFormal}:<br>${formalGender}${formalStrength} (${uiTexts[currentLang].difference}: <span class="big-number">${Math.abs(formalScore)}</span>)</p>
+      </div>
+      `;
+      document.getElementById('results').innerHTML = results;
+      }
+      
+      // Initialize with default language
+      setLanguage('en');
+    </script>
+  </body>
 </html>
