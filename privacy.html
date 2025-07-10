@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 1em;
+        }
+        p {
+            font-size: 1.1em;
+            margin: 0.8em 0;
+            text-align: left;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+        }
+        select {
+            padding: 10px;
+            font-size: 1em;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            p {
+                font-size: 1em;
+            }
+            .container {
+                padding: 15px;
+            }
+        }
+        /* Right-to-left support for Arabic */
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <select id="languageSelect" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="ar">العربية</option>
+    </select>
+    <div class="container" id="content">
+        <h1 id="title">Privacy Policy</h1>
+        <p id="appName"></p>
+        <p id="noData"></p>
+        <p id="internet"></p>
+        <p id="noLogin"></p>
+        <p id="storage"></p>
+        <p id="noSharing"></p>
+        <p id="contact"></p>
+    </div>
+
+    <script>
+        // Default parameters if not provided in URL
+        const defaultParams = {
+            email: "contact@example.com",
+            appName: "Tatoone Application",
+            url: "https://example.com"
+        };
+
+        // Function to get URL parameters
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                email: params.get('email') || defaultParams.email,
+                appName: params.get('appName') || defaultParams.appName,
+                url: params.get('url') || defaultParams.url
+            };
+        }
+
+        // Language content
+        const content = {
+            en: {
+                title: "Privacy Policy",
+                appName: (params) => `${params.appName}`,
+                noData: "This app does not collect or store any personal user information.",
+                internet: (params) => `The app uses Internet access only to load and display game content from our public website <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "No login, account, or personal data is required to use the app.",
+                storage: "The app may save downloaded files to your device storage at your request.",
+                noSharing: "We do not share any user data with third parties.",
+                contact: (params) => `If you have any questions, please contact us at <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            fr: {
+                title: "Politique de Confidentialité",
+                appName: (params) => `${params.appName}`,
+                noData: "Cette application ne collecte ni ne stocke aucune information personnelle des utilisateurs.",
+                internet: (params) => `L'application utilise l'accès à Internet uniquement pour charger et afficher le contenu du jeu depuis notre site web public <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "Aucune connexion, compte ou donnée personnelle n'est requise pour utiliser l'application.",
+                storage: "L'application peut enregistrer des fichiers téléchargés sur le stockage de votre appareil à votre demande.",
+                noSharing: "Nous ne partageons aucune donnée utilisateur avec des tiers.",
+                contact: (params) => `Si vous avez des questions, veuillez nous contacter à <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            ar: {
+                title: "سياسة الخصوصية",
+                appName: (params) => `${params.appName}`,
+                noData: "هذا التطبيق لا يجمع أو يخزن أي معلومات شخصية للمستخدم.",
+                internet: (params) => `يستخدم التطبيق الوصول إلى الإنترنت فقط لتحميل وعرض محتوى اللعبة من موقعنا العام <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "لا يتطلب التطبيق تسجيل دخول أو حساب أو بيانات شخصية لاستخدامه.",
+                storage: "قد يحفظ التطبيق الملفات التي تم تنزيلها على تخزين جهازك بناءً على طلبك.",
+                noSharing: "نحن لا نشارك أي بيانات مستخدم مع أطراف ثالثة.",
+                contact: (params) => `إذا كانت لديك أي أسئلة، يرجى التواصل معنا على <a href="mailto:${params.email}">${params.email}</a>.`
+            }
+        };
+
+        // Function to update content based on language
+        function updateContent(lang) {
+            const params = getUrlParams();
+            const texts = content[lang];
+            document.getElementById('title').textContent = texts.title;
+            document.getElementById('appName').textContent = texts.appName(params);
+            document.getElementById('noData').text ULL
+System: Content = texts.noData;
+            document.getElementById('internet').innerHTML = texts.internet(params);
+            document.getElementById('noLogin').textContent = texts.noLogin;
+            document.getElementById('storage').textContent = texts.storage;
+            document.getElementById('noSharing').textContent = texts.noSharing;
+            document.getElementById('contact').innerHTML = texts.contact(params);
+
+            // Apply RTL for Arabic零部件
+
+System: Arabic
+            document.getElementById('content').classList.toggle('rtl', lang === 'ar');
+        }
+
+        // Function to handle language change
+        function changeLanguage() {
+            const lang = document.getElementById('languageSelect').value;
+            updateContent(lang);
+        }
+
+        // Initialize with default language (English)
+        updateContent('en');
+    </script>
+</body>
+</html>
