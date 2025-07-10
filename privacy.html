@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&family=Noto+Serif+CJK+SC&family=Noto+Serif+CJK+JP&family=Amiri&family=Noto+Serif+Hebrew&family=Noto+Serif+Thai&family=Noto+Serif+Khmer&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Noto Sans', sans-serif;
             line-height: 1.6;
             color: #333;
             max-width: 800px;
@@ -40,6 +41,7 @@
             border: 1px solid #ccc;
             background-color: #fff;
             cursor: pointer;
+            width: 200px;
         }
         a {
             color: #2980b9;
@@ -61,18 +63,56 @@
             .container {
                 padding: 15px;
             }
+            select {
+                width: 100%;
+            }
         }
         .rtl {
             direction: rtl;
             text-align: right;
+            font-family: 'Amiri', serif;
+        }
+        .hebrew {
+            font-family: 'Noto Serif Hebrew', serif;
+        }
+        .chinese {
+            font-family: 'Noto Serif CJK SC', serif;
+        }
+        .japanese {
+            font-family: 'Noto Serif CJK JP', serif;
+        }
+        .thai {
+            font-family: 'Noto Serif Thai', serif;
+        }
+        .khmer {
+            font-family: 'Noto Serif Khmer', serif;
         }
     </style>
 </head>
 <body>
     <select id="languageSelect" onchange="changeLanguage()">
-        <option value="en">English</option>
-        <option value="fr">Français</option>
-        <option value="ar">العربية</option>
+        <option value="en-US">🇺🇸 English (American)</option>
+        <option value="en-GB">🇬🇧 English (British)</option>
+        <option value="fr-FR">🇫🇷 Français</option>
+        <option value="ar-MA">🇲🇦 العربية (المغرب)</option>
+        <option value="ar-DZ">🇩🇿 العربية (الجزائر)</option>
+        <option value="sv-SE">🇸🇪 Svenska</option>
+        <option value="fa-IR">🇮🇷 فارسی</option>
+        <option value="he-IL">🇮🇱 עברית</option>
+        <option value="zh-CN">🇨🇳 简体中文</option>
+        <option value="th-TH">🇹🇭 ไทย</option>
+        <option value="pt-PT">🇵🇹 Português</option>
+        <option value="es-ES">🇪🇸 Español</option>
+        <option value="el-GR">🇬🇷 Ελληνικά</option>
+        <option value="nl-NL">🇳🇱 Nederlands</option>
+        <option value="de-DE">🇩🇪 Deutsch</option>
+        <option value="fr-BE">🇧🇪 Français (Belgique)</option>
+        <option value="nl-BE">🇧🇪 Nederlands (België)</option>
+        <option value="de-BE">🇧🇪 Deutsch (Belgien)</option>
+        <option value="lb-LU">🇱🇺 Lëtzebuergesch</option>
+        <option value="km-KH">🇰🇭 ភាសាខ្មែរ</option>
+        <option value="id-ID">🇮🇩 Bahasa Indonesia</option>
+        <option value="ja-JP">🇯🇵 日本語</option>
     </select>
     <div class="container" id="content">
         <h1 id="title">Privacy Policy</h1>
@@ -90,7 +130,8 @@
         const defaultParams = {
             email: "contact@example.com",
             appName: "Tatoone Application",
-            url: "https://example.com"
+            url: "https://example.com",
+            countrycode: "en-US"
         };
 
         // Function to get URL parameters
@@ -99,13 +140,14 @@
             return {
                 email: params.get('email') || defaultParams.email,
                 appName: params.get('appName') || defaultParams.appName,
-                url: params.get('url') || defaultParams.url
+                url: params.get('url') || defaultParams.url,
+                countrycode: params.get('countrycode') || defaultParams.countrycode
             };
         }
 
         // Language content
         const content = {
-            en: {
+            "en-US": {
                 title: "Privacy Policy",
                 appName: (params) => `${params.appName}`,
                 noData: "This app does not collect or store any personal user information.",
@@ -115,7 +157,17 @@
                 noSharing: "We do not share any user data with third parties.",
                 contact: (params) => `If you have any questions, please contact us at <a href="mailto:${params.email}">${params.email}</a>.`
             },
-            fr: {
+            "en-GB": {
+                title: "Privacy Policy",
+                appName: (params) => `${params.appName}`,
+                noData: "This app does not collect or store any personal user information.",
+                internet: (params) => `The app uses Internet access only to load and display game content from our public website <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "No login, account, or personal data is required to use the app.",
+                storage: "The app may save downloaded files to your device storage at your request.",
+                noSharing: "We do not share any user data with third parties.",
+                contact: (params) => `If you have any questions, please contact us at <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "fr-FR": {
                 title: "Politique de Confidentialité",
                 appName: (params) => `${params.appName}`,
                 noData: "Cette application ne collecte ni ne stocke aucune information personnelle des utilisateurs.",
@@ -125,7 +177,7 @@
                 noSharing: "Nous ne partageons aucune donnée utilisateur avec des tiers.",
                 contact: (params) => `Si vous avez des questions, veuillez nous contacter à <a href="mailto:${params.email}">${params.email}</a>.`
             },
-            ar: {
+            "ar-MA": {
                 title: "سياسة الخصوصية",
                 appName: (params) => `${params.appName}`,
                 noData: "هذا التطبيق لا يجمع أو يخزن أي معلومات شخصية للمستخدم.",
@@ -134,13 +186,193 @@
                 storage: "قد يحفظ التطبيق الملفات التي تم تنزيلها على تخزين جهازك بناءً على طلبك.",
                 noSharing: "نحن لا نشارك أي بيانات مستخدم مع أطراف ثالثة.",
                 contact: (params) => `إذا كانت لديك أي أسئلة، يرجى التواصل معنا على <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "ar-DZ": {
+                title: "سياسة الخصوصية",
+                appName: (params) => `${params.appName}`,
+                noData: "هذا التطبيق لا يجمع أو يخزن أي معلومات شخصية للمستخدم.",
+                internet: (params) => `يستخدم التطبيق الوصول إلى الإنترنت فقط لتحميل وعرض محتوى اللعبة من موقعنا العام <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "لا يتطلب التطبيق تسجيل دخول أو حساب أو بيانات شخصية لاستخدامه.",
+                storage: "قد يحفظ التطبيق الملفات التي تم تنزيلها على تخزين جهازك بناءً على طلبك.",
+                noSharing: "نحن لا نشارك أي بيانات مستخدم مع أطراف ثالثة.",
+                contact: (params) => `إذا كانت لديك أي أسئلة، يرجى التواصل معنا على <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "sv-SE": {
+                title: "Integritetspolicy",
+                appName: (params) => `${params.appName}`,
+                noData: "Denna app samlar inte in eller lagrar någon personlig användarinformation.",
+                internet: (params) => `Appen använder internetåtkomst endast för att ladda och visa spelinnehåll från vår offentliga webbplats <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "Ingen inloggning, konto eller personuppgifter krävs för att använda appen.",
+                storage: "Appen kan spara nedladdade filer på din enhets lagring på din begäran.",
+                noSharing: "Vi delar inte någon användardata med tredje part.",
+                contact: (params) => `Om du har några frågor, kontakta oss på <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "fa-IR": {
+                title: "سیاست حفظ حریم خصوصی",
+                appName: (params) => `${params.appName}`,
+                noData: "این برنامه هیچ اطلاعات شخصی کاربر را جمع‌آوری یا ذخیره نمی‌کند.",
+                internet: (params) => `این برنامه فقط برای بارگذاری و نمایش محتوای بازی از وب‌سایت عمومی ما <a href="${params.url}">${params.url}</a> از دسترسی به اینترنت استفاده می‌کند.`,
+                noLogin: "برای استفاده از برنامه نیازی به ورود، حساب کاربری یا اطلاعات شخصی نیست.",
+                storage: "برنامه ممکن است فایل‌های دانلود شده را با درخواست شما در حافظه دستگاه ذخیره کند.",
+                noSharing: "ما هیچ داده‌ای از کاربر را با اشخاص ثالث به اشتراک نمی‌گذاریم.",
+                contact: (params) => `اگر سؤالی دارید، لطفاً با ما در <a href="mailto:${params.email}">${params.email}</a> تماس بگیرید.`
+            },
+            "he-IL": {
+                title: "מדיניות פרטיות",
+                appName: (params) => `${params.appName}`,
+                noData: "אפליקציה זו אינה אוספת או מאחסנת מידע אישי של משתמשים.",
+                internet: (params) => `האפליקציה משתמשת בגישה לאינטרנט רק כדי לטעון ולהציג תוכן משחק מהאתר הציבורי שלנו <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "לא נדרשת כניסה, חשבון או נתונים אישיים כדי להשתמש באפליקציה.",
+                storage: "האפליקציה עשויה לשמור קבצים שהורדו באחסון המכשיר שלך לפי בקשתך.",
+                noSharing: "איננו משתפים נתוני משתמשים עם צדדים שלישיים.",
+                contact: (params) => `אם יש לך שאלות, אנא צור קשר בכתובת <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "zh-CN": {
+                title: "隐私政策",
+                appName: (params) => `${params.appName}`,
+                noData: "此应用程序不会收集或存储任何用户个人信息。",
+                internet: (params) => `该应用程序仅使用互联网访问权限从我们的公共网站 <a href="${params.url}">${params.url}</a> 加载和显示游戏内容。`,
+                noLogin: "使用该应用程序无需登录、账户或个人数据。",
+                storage: "应用程序可能会应您的请求将下载的文件保存到您的设备存储中。",
+                noSharing: "我们不会与第三方分享任何用户数据。",
+                contact: (params) => `如有任何疑问，请通过 <a href="mailto:${params.email}">${params.email}</a> 联系我们。`
+            },
+            "th-TH": {
+                title: "นโยบายความเป็นส่วนตัว",
+                appName: (params) => `${params.appName}`,
+                noData: "แอปพลิเคชันนี้ไม่เก็บรวบรวมหรือจัดเก็บข้อมูลส่วนบุคคลของผู้ใช้",
+                internet: (params) => `แอปพลิเคชันใช้การเข้าถึงอินเทอร์เน็ตเพื่อโหลดและแสดงเนื้อหาเกมจากเว็บไซต์สาธารณะของเรา <a href="${params.url}">${params.url}</a> เท่านั้น`,
+                noLogin: "ไม่ต้องลงชื่อเข้าใช้ บัญชี หรือข้อมูลส่วนบุคคลเพื่อใช้แอปพลิเคชัน",
+                storage: "แอปพลิเคชันอาจบันทึกไฟล์ที่ดาวน์โหลดไปยังที่เก็บข้อมูลในอุปกรณ์ของคุณตามคำขอของคุณ",
+                noSharing: "เราไม่แบ่งปันข้อมูลผู้ใช้กับบุคคลที่สาม",
+                contact: (params) => `หากคุณมีคำถามใดๆ โปรดติดต่อเราที่ <a href="mailto:${params.email}">${params.email}</a>`
+            },
+            "pt-PT": {
+                title: "Política de Privacidade",
+                appName: (params) => `${params.appName}`,
+                noData: "Esta aplicação não coleta nem armazena qualquer informação pessoal do utilizador.",
+                internet: (params) => `A aplicação usa acesso à Internet apenas para carregar e exibir conteúdo de jogos do nosso site público <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "Não é necessário login, conta ou dados pessoais para usar a aplicação.",
+                storage: "A aplicação pode salvar ficheiros descarregados no armazenamento do seu dispositivo a seu pedido.",
+                noSharing: "Não partilhamos quaisquer dados do utilizador com terceiros.",
+                contact: (params) => `Se tiver alguma dúvida, por favor contacte-nos em <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "es-ES": {
+                title: "Política de Privacidad",
+                appName: (params) => `${params.appName}`,
+                noData: "Esta aplicación no recopila ni almacena información personal del usuario.",
+                internet: (params) => `La aplicación utiliza el acceso a Internet solo para cargar y mostrar contenido de juegos desde nuestro sitio web público <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "No se requiere inicio de sesión, cuenta o datos personales para usar la aplicación.",
+                storage: "La aplicación puede guardar archivos descargados en el almacenamiento de su dispositivo a su solicitud.",
+                noSharing: "No compartimos ningún dato del usuario con terceros.",
+                contact: (params) => `Si tiene alguna pregunta, contáctenos en <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "el-GR": {
+                title: "Πολιτική Απορρήτου",
+                appName: (params) => `${params.appName}`,
+                noData: "Αυτή η εφαρμογή δεν συλλέγει ούτε αποθηκεύει προσωπικές πληροφορίες χρηστών.",
+                internet: (params) => `Η εφαρμογή χρησιμοποιεί πρόσβαση στο διαδίκτυο μόνο για τη φόρτωση και εμφάνιση περιεχομένου παιχνιδιών από τον δημόσιο ιστότοπό μας <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "Δεν απαιτείται σύνδεση, λογαριασμός ή προσωπικά δεδομένα για τη χρήση της εφαρμογής.",
+                storage: "Η εφαρμογή μπορεί να αποθηκεύσει ληφθέντα αρχεία στην αποθήκευση της συσκευής σας κατόπιν αιτήματός σας.",
+                noSharing: "Δεν μοιραζόμαστε δεδομένα χρηστών με τρίτους.",
+                contact: (params) => `Εάν έχετε ερωτήσεις, παρακαλούμε επικοινωνήστε μαζί μας στο <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "nl-NL": {
+                title: "Privacybeleid",
+                appName: (params) => `${params.appName}`,
+                noData: "Deze app verzamelt of bewaart geen persoonlijke gebruikersinformatie.",
+                internet: (params) => `De app gebruikt internettoegang alleen om game-inhoud te laden en weer te geven vanaf onze openbare website <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "Er is geen login, account of persoonlijke gegevens vereist om de app te gebruiken.",
+                storage: "De app kan gedownloade bestanden opslaan op uw apparaatopslag op uw verzoek.",
+                noSharing: "We delen geen gebruikersgegevens met derden.",
+                contact: (params) => `Als u vragen heeft, neem dan contact met ons op via <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "de-DE": {
+                title: "Datenschutzrichtlinie",
+                appName: (params) => `${params.appName}`,
+                noData: "Diese App sammelt oder speichert keine persönlichen Nutzerinformationen.",
+                internet: (params) => `Die App verwendet den Internetzugang nur, um Spielinhalte von unserer öffentlichen Website <a href="${params.url}">${params.url}</a> zu laden und anzuzeigen.`,
+                noLogin: "Es ist kein Login, Konto oder persönliche Daten erforderlich, um die App zu nutzen.",
+                storage: "Die App kann heruntergeladene Dateien auf Ihrem Gerätespeicher auf Ihren Wunsch speichern.",
+                noSharing: "Wir teilen keine Nutzerdaten mit Dritten.",
+                contact: (params) => `Wenn Sie Fragen haben, kontaktieren Sie uns bitte unter <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "fr-BE": {
+                title: "Politique de Confidentialité",
+                appName: (params) => `${params.appName}`,
+                noData: "Cette application ne collecte ni ne stocke aucune information personnelle des utilisateurs.",
+                internet: (params) => `L'application utilise l'accès à Internet uniquement pour charger et afficher le contenu du jeu depuis notre site web public <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "Aucune connexion, compte ou donnée personnelle n'est requise pour utiliser l'application.",
+                storage: "L'application peut enregistrer des fichiers téléchargés sur le stockage de votre appareil à votre demande.",
+                noSharing: "Nous ne partageons aucune donnée utilisateur avec des tiers.",
+                contact: (params) => `Si vous avez des questions, veuillez nous contacter à <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "nl-BE": {
+                title: "Privacybeleid",
+                appName: (params) => `${params.appName}`,
+                noData: "Deze app verzamelt of bewaart geen persoonlijke gebruikersinformatie.",
+                internet: (params) => `De app gebruikt internettoegang alleen om game-inhoud te laden en weer te geven vanaf onze openbare website <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "Er is geen login, account of persoonlijke gegevens vereist om de app te gebruiken.",
+                storage: "De app kan gedownloade bestanden opslaan op uw apparaatopslag op uw verzoek.",
+                noSharing: "We delen geen gebruikersgegevens met derden.",
+                contact: (params) => `Als u vragen heeft, neem dan contact met ons op via <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "de-BE": {
+                title: "Datenschutzrichtlinie",
+                appName: (params) => `${params.appName}`,
+                noData: "Diese App sammelt oder speichert keine persönlichen Nutzerinformationen.",
+                internet: (params) => `Die App verwendet den Internetzugang nur, um Spielinhalte von unserer öffentlichen Website <a href="${params.url}">${params.url}</a> zu laden und anzuzeigen.`,
+                noLogin: "Es ist kein Login, Konto oder persönliche Daten erforderlich, um die App zu nutzen.",
+                storage: "Die App kann heruntergeladene Dateien auf Ihrem Gerätespeicher auf Ihren Wunsch speichern.",
+                noSharing: "Wir teilen keine Nutzerdaten mit Dritten.",
+                contact: (params) => `Wenn Sie Fragen haben, kontaktieren Sie uns bitte unter <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "lb-LU": {
+                title: "Dateschutzpolitik",
+                appName: (params) => `${params.appName}`,
+                noData: "Dës App sammelt oder späichert keng perséinlech Benotzerinformatiounen.",
+                internet: (params) => `D'App benotzt den Internetzougang nëmme fir Spillinhalter vun eiser ëffentlecher Websäit <a href="${params.url}">${params.url}</a> ze lueden an ze weisen.`,
+                noLogin: "Kee Login, Kont oder perséinlech Donnéeë sinn erfuerderlech fir d'App ze benotzen.",
+                storage: "D'App kann erofgeluede Fichieren op Ärem Gerätspeicher op Äre Wonsch späicheren.",
+                noSharing: "Mir deelen keng Benotzerdaten mat Drëtteparteien.",
+                contact: (params) => `Wann Dir Froen hutt, kontaktéiert eis w.e.g. op <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "km-KH": {
+                title: "គោលការណ៍ឯកជនភាព",
+                appName: (params) => `${params.appName}`,
+                noData: "កម្មវិធីនេះមិនប្រមូល ឬរក្សាទុកព័ត៌មានផ្ទាល់ខ្លួនរបស់អ្នកប្រើប្រាស់ទេ។",
+                internet: (params) => `កម្មវិធីប្រើការចូលប្រើអ៊ីនធឺណិតតែសម្រាប់ផ្ទុក និងបង្ហាញមាតិកាល្បែងពីគេហទំព័រសាធារណៈរបស់យើង <a href="${params.url}">${params.url}</a>។`,
+                noLogin: "មិនតម្រូវឱ្យចូលគណនី ឬព័ត៌មានផ្ទាល់ខ្លួនដើម្បីប្រើកម្មវិធីនេះទេ។",
+                storage: "កម្មវិធីអាចរក្សាទុកឯកសារដែលបានទាញយកទៅក្នុងឧបករណ៍ផ្ទុករបស់អ្នកតាមសំណើរបស់អ្នក។",
+                noSharing: "យើងមិនចែករំលែកទិន្នន័យអ្នកប្រើជាមួយភាគីទីបីទេ។",
+                contact: (params) => `ប្រសិនបើអ្នកមានសំណួរណាមួយ សូមទាក់ទងមកយើងខ្ញុំតាម <a href="mailto:${params.email}">${params.email}</a>។`
+            },
+            "id-ID": {
+                title: "Kebijakan Privasi",
+                appName: (params) => `${params.appName}`,
+                noData: "Aplikasi ini tidak mengumpulkan atau menyimpan informasi pribadi pengguna.",
+                internet: (params) => `Aplikasi ini hanya menggunakan akses internet untuk memuat dan menampilkan konten permainan dari situs web publik kami <a href="${params.url}">${params.url}</a>.`,
+                noLogin: "Tidak diperlukan login, akun, atau data pribadi untuk menggunakan aplikasi ini.",
+                storage: "Aplikasi dapat menyimpan file yang diunduh ke penyimpanan perangkat Anda atas permintaan Anda.",
+                noSharing: "Kami tidak membagikan data pengguna dengan pihak ketiga.",
+                contact: (params) => `Jika Anda memiliki pertanyaan, silakan hubungi kami di <a href="mailto:${params.email}">${params.email}</a>.`
+            },
+            "ja-JP": {
+                title: "プライバシーポリシー",
+                appName: (params) => `${params.appName}`,
+                noData: "このアプリはユーザーの個人情報を収集または保存しません。",
+                internet: (params) => `このアプリは、公開ウェブサイト <a href="${params.url}">${params.url}</a> からゲームコンテンツを読み込んで表示するためにのみインターネットアクセスを使用します。`,
+                noLogin: "アプリを使用するためにログイン、アカウント、または個人情報は必要ありません。",
+                storage: "アプリは、リクエストに応じてダウンロードしたファイルをデバイスのストレージに保存する場合があります。",
+                noSharing: "ユーザーデータを第三者と共有することはありません。",
+                contact: (params) => `ご質問がある場合は、<a href="mailto:${params.email}">${params.email}</a> までご連絡ください。`
             }
         };
 
         // Function to update content based on language
         function updateContent(lang) {
             const params = getUrlParams();
-            const texts = content[lang];
+            const texts = content[lang] || content["en-US"]; // Fallback to en-US
             document.getElementById('title').textContent = texts.title;
             document.getElementById('appName').textContent = texts.appName(params);
             document.getElementById('noData').textContent = texts.noData;
@@ -150,8 +382,22 @@
             document.getElementById('noSharing').textContent = texts.noSharing;
             document.getElementById('contact').innerHTML = texts.contact(params);
 
-            // Apply RTL for Arabic
-            document.getElementById('content').classList.toggle('rtl', lang === 'ar');
+            // Apply language-specific styles
+            const container = document.getElementById('content');
+            container.classList.remove('rtl', 'hebrew', 'chinese', 'japanese', 'thai', 'khmer');
+            if (lang.startsWith('ar') || lang === 'fa-IR' || lang === 'he-IL') {
+                container.classList.add('rtl');
+                if (lang === 'he-IL') container.classList.add('hebrew');
+                if (lang === 'fa-IR') container.classList.add('rtl'); // Persian uses Amiri font via RTL
+            } else if (lang === 'zh-CN') {
+                container.classList.add('chinese');
+            } else if (lang === 'ja-JP') {
+                container.classList.add('japanese');
+            } else if (lang === 'th-TH') {
+                container.classList.add('thai');
+            } else if (lang === 'km-KH') {
+                container.classList.add('khmer');
+            }
         }
 
         // Function to handle language change
@@ -160,8 +406,20 @@
             updateContent(lang);
         }
 
-        // Initialize with default language (English)
-        updateContent('en');
+        // Initialize with language from countrycode
+        function initializeLanguage() {
+            const params = getUrlParams();
+            const lang = params.countrycode;
+            if (content[lang]) {
+                document.getElementById('languageSelect').value = lang;
+                updateContent(lang);
+            } else {
+                updateContent('en-US'); // Fallback to en-US
+            }
+        }
+
+        // Run initialization
+        initializeLanguage();
     </script>
 </body>
 </html>
