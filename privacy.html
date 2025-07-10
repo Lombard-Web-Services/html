@@ -62,7 +62,6 @@
                 padding: 15px;
             }
         }
-        /* Right-to-left support for Arabic */
         .rtl {
             direction: rtl;
             text-align: right;
@@ -144,17 +143,14 @@
             const texts = content[lang];
             document.getElementById('title').textContent = texts.title;
             document.getElementById('appName').textContent = texts.appName(params);
-            document.getElementById('noData').text ULL
-System: Content = texts.noData;
+            document.getElementById('noData').textContent = texts.noData;
             document.getElementById('internet').innerHTML = texts.internet(params);
             document.getElementById('noLogin').textContent = texts.noLogin;
             document.getElementById('storage').textContent = texts.storage;
             document.getElementById('noSharing').textContent = texts.noSharing;
             document.getElementById('contact').innerHTML = texts.contact(params);
 
-            // Apply RTL for Arabic零部件
-
-System: Arabic
+            // Apply RTL for Arabic
             document.getElementById('content').classList.toggle('rtl', lang === 'ar');
         }
 
