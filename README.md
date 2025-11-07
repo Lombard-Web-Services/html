@@ -11,3 +11,7 @@ Some html5 CSS3 and Javascript helper's script I have programmed.
 
 ## Multilingual Privacy Policy generator
 **[policy.html](https://lombard-web-services.github.io/html/privacy.html?email=your-email@domain.com&appName=Application%20d%27exemple&url=https://example.com&countrycode=fr-FR)** This simple yet powerful HTML template lets you generate a clear, customized Privacy Policy by just changing URL parameters. It’s designed to be multilingual, so your users can read your policy in their own language — no extra backend needed. Perfect for apps, websites, or any project that needs a quick and transparent privacy statement.
+
+
+## Hexagonal Radar Visualization: Symplectic Geometry, Lattices, and Latent Distributions
+**[radar-symplex-viz.html](https://lombard-web-services.github.io/html/radar-symplex-viz.html)** is an interactive hexagonal radar visualization tool exploring symplectic geometry, Gaussian lattices, and latent distributions like Dirichlet allocations (LDA). It models multivariate data in phase-space coordinates, inspired by Thales' work on Maxwell's 2-form and Wigner/Woodward functions, with hexagonal packing for optimal density.
