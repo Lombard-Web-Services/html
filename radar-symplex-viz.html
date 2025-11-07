@@ -40,7 +40,7 @@
     
     <div class="explanation">
         <h2>Explications Générales</h2>
-        <p>Ce diagramme radar hexagonal modélise empiriquement des données multivariées dans un contexte symplétique (inspiré des travaux de Thales sur la 2-forme de Maxwell et la fonction Wigner/Woodward). Les axes radiaux représentent des coordonnées de phase-space (e.g., temps/fréquence/delay/doppler/polarisations), projetées sur un tore discret pour préserver les invariants Liouville (volumes phase-space). L'hexagone maximise la densité (\(\eta \approx 0,907\) via lattice A₂), idéal pour packer des quasi-distributions sans distorsion.</p>
+        <p>Ce diagramme radar hexagonal modélise empiriquement des données multivariées dans un contexte symplectique (inspiré des travaux de Thales sur la 2-forme de Maxwell et la fonction Wigner/Woodward). Les axes radiaux représentent des coordonnées de phase-space (e.g., temps/fréquence/delay/doppler/polarisations), projetées sur un tore discret pour préserver les invariants Liouville (volumes phase-space). L'hexagone maximise la densité (\(\eta \approx 0,907\) via lattice A₂), idéal pour packer des quasi-distributions sans distorsion.</p>
         <p><strong>Lien avec la compression :</strong> Comme dans le packing hexagonal (Gauss 1830), cela "compresse" les latents en visualisant ~90% d'espace utile vs. ~78% en grille carrée. Utilisé pour radar (ambigüités Woodward) ou ML (topics LDA). Datasets complétés via simulation (Dirichlet pour LDA, MVN pour Gaussien, Wigner-like pour baseline).</p>
     </div>
 
@@ -203,7 +203,7 @@
         <select id="distributionSelect">
             <option value="lda">LDA (Dirichlet sur Simplex)</option>
             <option value="gaussian">Gaussien Latent (Multivarié Normal)</option>
-            <option value="wigner">Wigner (Symplétique Radar, Baseline)</option>
+            <option value="wigner">Wigner (symplectique Radar, Baseline)</option>
         </select>
         <button onclick="updateChart()">Mettre à Jour le Chart</button>
     </div>
@@ -217,10 +217,10 @@
         <div class="dataset-info">Valeurs : 11.66%, 54.77%, 2.02%, 0.28%, 31.23%, 0.04% (somme=100%).</div>
         
         <h3>Gaussien Latent (Multivariate Normal)</h3>
-        <p>Distribution normale multivariée (\(\mu=0.5\), \(\Sigma=0.1 \cdot I\)). <strong>Dataset complété :</strong> Échantillon simulé \(N(0.5, 0.1)\) sur 6 dims, clippé/normalisé [0,1] : [0.3515, 0.6203, 0.4128, 0.5847, 0.4892, 0.5311] (valeurs approximées/étendues pour complétude ; seed 42). Géométrie : Ellipsoïdes dans phase-space, sans structure symplétique native – mais projeté sur hex pour approx. sympl. (via Darboux coords). Comparaison : Moins "compact" que LDA (\(\eta\) effective ~0.785 si carré), mais fluide pour flows continus (e.g., VAE latents).</p>
+        <p>Distribution normale multivariée (\(\mu=0.5\), \(\Sigma=0.1 \cdot I\)). <strong>Dataset complété :</strong> Échantillon simulé \(N(0.5, 0.1)\) sur 6 dims, clippé/normalisé [0,1] : [0.3515, 0.6203, 0.4128, 0.5847, 0.4892, 0.5311] (valeurs approximées/étendues pour complétude ; seed 42). Géométrie : Ellipsoïdes dans phase-space, sans structure symplectique native – mais projeté sur hex pour approx. sympl. (via Darboux coords). Comparaison : Moins "compact" que LDA (\(\eta\) effective ~0.785 si carré), mais fluide pour flows continus (e.g., VAE latents).</p>
         <div class="dataset-info">Valeurs : 35.15%, 62.03%, 41.28%, 58.47%, 48.92%, 53.11% (moyenne ~50%).</div>
         
-        <h3>Wigner (Baseline Symplétique)</h3>
+        <h3>Wigner (Baseline symplectique)</h3>
         <p>Quasi-distribution Wigner sur orbite coadjoint (Heisenberg-Weyl), pour ambiguïté radar. <strong>Dataset complété :</strong> Simulation 1D Wigner (Gauss * cos) projetée sur 6D : [1.0000, 0.0000, 0.9239, 0.9239, 0.0000, 1.0000]. Idéal pour visualiser invariants sous groupe action – comme dans le paper Thales 2024.</p>
         <div class="dataset-info">Valeurs : 100%, 0%, 92.39%, 92.39%, 0%, 100% (oscillations phase-space).</div>
         
