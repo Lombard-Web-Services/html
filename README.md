@@ -15,3 +15,6 @@ Some html5 CSS3 and Javascript helper's script I have programmed.
 
 ## Hexagonal Radar Visualization: Symplectic Geometry, Lattices, and Latent Distributions
 **[radar-symplex-viz.html](https://lombard-web-services.github.io/html/radar-symplex-viz.html)** is an interactive hexagonal radar visualization tool exploring symplectic geometry, Gaussian lattices, and latent distributions like Dirichlet allocations (LDA). It models multivariate data in phase-space coordinates, inspired by Thales' work on Maxwell's 2-form and Wigner/Woodward functions, with hexagonal packing for optimal density.
+
+
+## L'équation Newton-Laplace-Poisson-Biot
