@@ -18,3 +18,4 @@ Some html5 CSS3 and Javascript helper's script I have programmed.
 
 
 ## L'équation Newton-Laplace-Poisson-Biot
+**[Newton-Laplace-Poisson-Biot.html](https://lombard-web-services.github.io/html/Newton-Laplace-Poisson-Biot.html)**
