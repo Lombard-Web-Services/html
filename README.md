@@ -18,4 +18,5 @@ Some html5 CSS3 and Javascript helper's script I have programmed.
 
 
 ## L'équation Newton-Laplace-Poisson-Biot
-**[Newton-Laplace-Poisson-Biot.html](https://lombard-web-services.github.io/html/Newton-Laplace-Poisson-Biot.html)**
+**[Newton-Laplace-Poisson-Biot.html](https://lombard-web-services.github.io/html/Newton-Laplace-Poisson-Biot.html)** Interactive 3D audio visualization of sound speed in gaseous media, built with Three.js. Models the classical Newton-Laplace equation with Poisson-Biot corrections, featuring real-time audio-reactive molecular displacement, compression/rarefaction spheres, and wavefront propagation. Upload any MP3/WAV/OGG to drive the simulation — temperature, heat capacity ratio γ = c/c′, and sensitivity are fully interactive. Light-theme glassmorphism UI with real-time spectrum analysis and pedagogical metrics panel.
+
